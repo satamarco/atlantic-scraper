@@ -5,6 +5,8 @@ import os
 import json
 import urllib.parse
 import requests
+import random
+import re
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
@@ -138,14 +140,37 @@ async def main():
     print("Generating article and prompt...")
     raw_response = generate_article(local_pool, international_pool)
     
+    # 1. Gestione Robusta del JSON (Cleaning preliminary)
+    clean_json = raw_response.strip()
+    if clean_json.startswith("```json"):
+        clean_json = clean_json[7:]
+    elif clean_json.startswith("```"):
+        clean_json = clean_json[3:]
+    if clean_json.endswith("```"):
+        clean_json = clean_json[:-3]
+    clean_json = clean_json.strip()
+    
     try:
-        parsed_response = json.loads(raw_response)
+        parsed_response = json.loads(clean_json)
         article_content = parsed_response.get("testo_articolo", "").strip()
         base_prompt = parsed_response.get("soggetto_immagine", "surreal geopolitical scene in a local neighborhood").strip()
     except json.JSONDecodeError:
-        print("Failed to parse JSON response. Falling back.")
-        article_content = raw_response.replace("```json", "").replace("```", "").strip()
-        base_prompt = "surreal geopolitical scene in a local neighborhood"
+        print("Failed to parse JSON response. Trying regex fallback.")
+        # 3. Fallback Pulito con regex
+        match_testo = re.search(r'"testo_articolo"\s*:\s*"(.*?)"\s*,\s*"soggetto_immagine"', clean_json, re.DOTALL)
+        if match_testo:
+            article_content = match_testo.group(1).strip()
+        else:
+            article_content = "**Dossier: System Failure**\n\nThe stream was corrupted and intercepted before delivery. Awaiting the next cycle."
+            
+        match_soggetto = re.search(r'"soggetto_immagine"\s*:\s*"(.*?)"', clean_json, re.DOTALL)
+        if match_soggetto:
+            base_prompt = match_soggetto.group(1).strip()
+        else:
+            base_prompt = "surreal geopolitical scene in a local neighborhood"
+    
+    # 2. Pulizia degli Escape Characters
+    article_content = article_content.replace("\\n", "\n").replace('\\"', '"').replace("\\'", "'")
     
     # Rimuoviamo eventuali tag markdown residui dal testo
     article_content = article_content.replace("```markdown", "").replace("```python", "").replace("```", "").strip()
