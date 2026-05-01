@@ -17,6 +17,29 @@ ARCHIVE_FILE = "archivio.json"
 
 st.set_page_config(page_title="Geopolitical Synthesizer", layout="centered")
 
+# Codice CSS per nascondere menu, footer, profilo GitHub e il pulsante rosso di Streamlit
+hide_st_style = """
+            <style>
+            /* Nasconde il menu ad hamburger in alto a destra */
+            #MainMenu {visibility: hidden;}
+            
+            /* Nasconde il footer 'Made with Streamlit' */
+            footer {visibility: hidden;}
+            
+            /* Nasconde l'header superiore (dove c'è l'avatar GitHub) */
+            header {visibility: hidden;}
+            [data-testid="stToolbar"] {visibility: hidden !important;}
+            
+            /* Nasconde il pulsante rosso fluttuante in basso a destra */
+            .stAppDeployButton {display: none !important;}
+            [data-testid="stAppDeployButton"] {display: none !important;}
+            
+            /* Nasconde eventuali altri badge fluttuanti di Streamlit */
+            .viewerBadge_container {display: none !important;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 st.markdown("""
 <style>
     /* Hide Streamlit Elements */
