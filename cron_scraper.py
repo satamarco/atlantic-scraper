@@ -1,12 +1,10 @@
 import google.generativeai as genai
 import asyncio
-from scraper import scrape_atlantic_world
+from scraper import scrape_all_sources
 import os
 import json
 from datetime import datetime
 
-# Non serve load_dotenv() per GitHub Actions se passiamo le variabili di ambiente
-# ma lo teniamo commentato/o usiamo try except nel caso si voglia usare in locale
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -25,33 +23,62 @@ def save_to_archive(article_text):
             
     new_entry = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "content": article_text
+        "content": article_text,
+        "type": "Sintesi Multi-Fonte"
     }
     data.insert(0, new_entry)
     
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-def generate_article(texts):
+def generate_article(sources_data):
     model = genai.GenerativeModel('gemini-2.5-flash')
-    prompt = f"""
-    You are a heavily depressed and drunk writer, with a rambling and disillusioned writing style similar to Bruce Chatwin.
-    Start from these titles/concepts extracted from The Atlantic to write an article IN ENGLISH:
-    {', '.join(texts)}
     
-    However, as you write, your state of inebriation and depression takes over. You soon start to digress about the miserable vicissitudes of your personal life, losing the thread of the geopolitical discourse to get lost in your faded memories, failures, and melancholies, mixing the facts of the world with your personal drama. 
-    WRITE THE ENTIRE ARTICLE IN ENGLISH.
+    atlantic_texts = ", ".join(sources_data.get("the_atlantic", []))
+    unione_texts = ", ".join(sources_data.get("unione_sarda", []))
+    sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
+    
+    prompt = f"""
+    Sei un giornalista analitico con uno stile super minimale, tagliente e strutturato.
+    Usa i seguenti dati estratti da tre testate giornalistiche:
+    
+    [The Atlantic]: {atlantic_texts}
+    [L'Unione Sarda]: {unione_texts}
+    [Sardinia Post]: {sardinia_texts}
+    
+    Crea un unico articolo STRUTTURATO ESATTAMENTE IN TRE SEZIONI, con i seguenti titoli precisi (usa Markdown per i titoli):
+    
+    # Scenario Globale
+    (Scrivi qui una sintesi basata unicamente sulle notizie di The Atlantic)
+    
+    ---
+    
+    # Focus Sardegna
+    (Scrivi qui una sintesi incrociata basata sulle notizie de L'Unione Sarda e Sardinia Post)
+    
+    ---
+    
+    # Il Punto di Vista
+    (Scrivi qui un'analisi originale che trovi un filo conduttore, anche sottile o provocatorio, tra le dinamiche globali dello Scenario Globale e quelle locali del Focus Sardegna)
+    
+    Regole di formattazione:
+    - Scrivi in italiano.
+    - Usa titoli grandi e in grassetto per le sezioni.
+    - Usa le linee di separazione nette in markdown (---) esattamente come richiesto.
+    - Tono austero, minimale e diretto, come un report di design svizzero.
     """
     response = model.generate_content(prompt)
     return response.text
 
 async def main():
-    print("Scraping started...")
-    texts = await scrape_atlantic_world()
-    print(f"Extracted {len(texts)} articles.")
+    print("Scraping multi-source started...")
+    sources_data = await scrape_all_sources()
+    print(f"Extracted from The Atlantic: {len(sources_data['the_atlantic'])}")
+    print(f"Extracted from L'Unione Sarda: {len(sources_data['unione_sarda'])}")
+    print(f"Extracted from Sardinia Post: {len(sources_data['sardinia_post'])}")
     
     print("Generating article...")
-    article = generate_article(texts)
+    article = generate_article(sources_data)
     
     print("Saving to archive...")
     save_to_archive(article)

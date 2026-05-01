@@ -1,7 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import asyncio
-from scraper import scrape_atlantic_world
+from scraper import scrape_all_sources
 import os
 import json
 from datetime import datetime
@@ -25,22 +25,49 @@ def save_to_archive(article_text):
             
     new_entry = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "content": article_text
+        "content": article_text,
+        "type": "Sintesi Multi-Fonte"
     }
     data.insert(0, new_entry) # Inseriamo all'inizio per avere dal più recente al più vecchio
     
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-def generate_article(texts):
+def generate_article(sources_data):
     model = genai.GenerativeModel('gemini-2.5-flash')
-    prompt = f"""
-    You are a heavily depressed and drunk writer, with a rambling and disillusioned writing style similar to Bruce Chatwin.
-    Start from these titles/concepts extracted from The Atlantic to write an article IN ENGLISH:
-    {{', '.join(texts)}}
     
-    However, as you write, your state of inebriation and depression takes over. You soon start to digress about the miserable vicissitudes of your personal life, losing the thread of the geopolitical discourse to get lost in your faded memories, failures, and melancholies, mixing the facts of the world with your personal drama. 
-    WRITE THE ENTIRE ARTICLE IN ENGLISH.
+    atlantic_texts = ", ".join(sources_data.get("the_atlantic", []))
+    unione_texts = ", ".join(sources_data.get("unione_sarda", []))
+    sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
+    
+    prompt = f"""
+    Sei un giornalista analitico con uno stile super minimale, tagliente e strutturato.
+    Usa i seguenti dati estratti da tre testate giornalistiche:
+    
+    [The Atlantic]: {atlantic_texts}
+    [L'Unione Sarda]: {unione_texts}
+    [Sardinia Post]: {sardinia_texts}
+    
+    Crea un unico articolo STRUTTURATO ESATTAMENTE IN TRE SEZIONI, con i seguenti titoli precisi (usa Markdown per i titoli):
+    
+    # Scenario Globale
+    (Scrivi qui una sintesi basata unicamente sulle notizie di The Atlantic)
+    
+    ---
+    
+    # Focus Sardegna
+    (Scrivi qui una sintesi incrociata basata sulle notizie de L'Unione Sarda e Sardinia Post)
+    
+    ---
+    
+    # Il Punto di Vista
+    (Scrivi qui un'analisi originale che trovi un filo conduttore, anche sottile o provocatorio, tra le dinamiche globali dello Scenario Globale e quelle locali del Focus Sardegna)
+    
+    Regole di formattazione:
+    - Scrivi in italiano.
+    - Usa titoli grandi e in grassetto per le sezioni.
+    - Usa le linee di separazione nette in markdown (---) esattamente come richiesto.
+    - Tono austero, minimale e diretto, come un report di design svizzero.
     """
     response = model.generate_content(prompt)
     return response.text
@@ -68,6 +95,12 @@ st.markdown("""
         margin-bottom: 2rem;
     }
     
+    hr {
+        border: none !important;
+        border-top: 1px solid #000000 !important;
+        margin: 2rem 0 !important;
+    }
+    
     /* Remove rounding and add strict borders */
     button, .stButton>button {
         border-radius: 0px !important;
@@ -79,6 +112,7 @@ st.markdown("""
         padding: 0.75rem 1.5rem !important;
         transition: none !important;
         text-transform: uppercase;
+        width: 100% !important;
     }
     button:hover, .stButton>button:hover {
         background-color: #000000 !important;
@@ -130,6 +164,18 @@ st.markdown("""
         color: #000000;
     }
     
+    /* Archive Label Styling */
+    .archive-label {
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: #000000;
+        color: #FFFFFF;
+        padding: 2px 6px;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+    }
+    
     /* Spacing & Padding */
     .block-container {
         padding-top: 4rem !important;
@@ -143,25 +189,23 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Atlantic Geopolitical Synthesizer")
+st.title("Geopolitical Synthesizer")
 
-tab1, tab2 = st.tabs(["Genera Nuovo", "Archivio"])
+tab1, tab2 = st.tabs(["Generatore", "Archivio"])
 
 with tab1:
-    if st.button("Scrape & Generate"):
-        with st.spinner("Scraping..."):
-            # Esecuzione scraping asincrono
-            texts = asyncio.run(scrape_atlantic_world())
-            st.write("Articoli estratti:", texts)
+    if st.button("Genera Sintesi Giornaliera"):
+        with st.spinner("Scraping cross-source in corso..."):
+            sources_data = asyncio.run(scrape_all_sources())
+            st.write(f"Voci recuperate: The Atlantic ({len(sources_data['the_atlantic'])}), L'Unione Sarda ({len(sources_data['unione_sarda'])}), Sardinia Post ({len(sources_data['sardinia_post'])})")
         
-        with st.spinner("Generazione articolo..."):
-            article = generate_article(texts)
-            st.subheader("Articolo Analitico Generato")
+        with st.spinner("Generazione sintesi incrociata..."):
+            article = generate_article(sources_data)
             st.write(article)
             
             # Salvataggio in archivio
             save_to_archive(article)
-            st.success("Articolo salvato nell'archivio!")
+            st.success("Sintesi Multi-Fonte salvata nell'archivio!")
 
 with tab2:
     st.header("Archivio Storico")
@@ -174,10 +218,12 @@ with tab2:
                 st.info("Nessun articolo presente nell'archivio.")
             else:
                 for entry in archive_data:
+                    type_label = entry.get('type', 'Articolo Base')
                     st.markdown(f"<div class='archive-date'>{entry['timestamp']}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='archive-label'>{type_label}</div>", unsafe_allow_html=True)
                     with st.expander("LEGGI ARTICOLO"):
                         st.write(entry['content'])
         except json.JSONDecodeError:
             st.error("Errore nella lettura del file archivio.json")
     else:
-        st.info("Nessun articolo presente nell'archivio. Genera un nuovo articolo per iniziare.")
+        st.info("Nessun articolo presente nell'archivio. Genera una nuova sintesi per iniziare.")
