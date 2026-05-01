@@ -1,5 +1,3 @@
-### `cron_scraper.py`
-
 import google.generativeai as genai
 import asyncio
 from scraper import scrape_all_sources
@@ -7,6 +5,7 @@ import os
 import json
 import urllib.parse
 import requests
+import random
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
@@ -45,6 +44,23 @@ def generate_article(sources_data):
     unione_texts = ", ".join(sources_data.get("unione_sarda", []))
     sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
     
+    eras = [
+        "the Renaissance", 
+        "the Cold War", 
+        "1920s Futurism", 
+        "Ancient Rome", 
+        "the Beat Generation"
+    ]
+    selected_era = random.choice(eras)
+    
+    voices = [
+        "A cryptic military dispatch",
+        "A hallucinated botanical diary",
+        "A review of a punk record that never existed",
+        "The minutes of an intergalactic condominium assembly"
+    ]
+    selected_voice = random.choice(voices)
+    
     prompt = f"""
     You are a confused, visionary, and rambling reporter.
     Use the following data extracted from exactly 15 recent articles across three diverse news outlets (The Atlantic, L'Unione Sarda, Sardinia Post):
@@ -56,9 +72,11 @@ def generate_article(sources_data):
     Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location (a surreal neighborhood of yours).
     
     Narrative and style rules:
-    - You MUST fuse and intertwine elements from all the stories. 
-    - Mix major global geopolitical themes with local Sardinian news details (e.g., food recipes, cultural events, local politics) without making any distinction in scale or importance. 
-    - Create absurd connections (e.g., an international Asian crisis caused by a Sardinian recipe gone wrong, or a local cultural event escalating into a global diplomatic incident).
+    - LENS & VOICE: Write the entire piece strictly in the style of: {selected_voice}.
+    - HISTORICAL ANCHOR: Ground your surreal metaphors and analogies in the aesthetics and themes of: {selected_era}.
+    - PROHIBITION OF CLICHÉS: DO NOT EVER cite Virginia Woolf, Rachel Carson, or Abraham Lincoln. If you need historical, literary, or scientific parallels, find new and unexpected ones (e.g., Borges, Calvino, Darwin, Ada Lovelace, etc.).
+    - INTEGRATION OF NEWS: You MUST fuse and intertwine elements from all the stories unpredictably. Do not use lazy transitions like "And speaking of...". Create absurd, visceral connections based on shared colors, sounds, or smells between Sardinia and the world. 
+    - Mix major global geopolitical themes with local Sardinian news details (e.g., food recipes, cultural events, local politics) without making any distinction in scale or importance.
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
     - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a random, visionary, and bold mashup of the disparate concepts present in the news.
     - Write ENTIRELY IN ENGLISH.
