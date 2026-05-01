@@ -60,11 +60,13 @@ def generate_article(sources_data):
     [L'Unione Sarda]: {unione_texts}
     [Sardinia Post]: {sardinia_texts}
     
-    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location.
+    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location today (May 1, 2026).
     
-    CRITICAL INSTRUCTIONS - FACTUALITY (MANDATORY):
+    CRITICAL INSTRUCTIONS - FACTUALITY AND CLEAN-UP (MANDATORY):
+    - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers. They are technical noise, not news.
+    - DATE FILTER: The text must refer to the events of TODAY (May 1, 2026). Do not focus on future event calendars unless they are the absolute core of the news.
     - You MUST extract and explicitly include at least 80% of the named entities (people, places, organizations) from the provided texts. Do not omit names like Chiara Poggi, Andrea Sempio, Sara Di Vita, towns like Pietracatella or Garlasco, or neighborhoods in Cagliari.
-    - Figures and Data: Do not approximate. If a news item mentions 25 billion dollars, a 750 million bonus, or a threshold of 5,000 inhabitants, these figures must be reported with surgical precision.
+    - Figures and Data: Do not approximate. If a news item mentions 25 billion dollars, a 750 million bonus, or a threshold of 5,000 inhabitants, these figures must be reported with surgical precision. Fuse them into the landscape (e.g., '6,284 silent clinics where the eighteen-year limit becomes a new bureaucratic frontier').
     - Sources: Cite the newspapers (The Atlantic, L'Unione Sarda, Sardinia Post) not as links, but as part of the narrative (e.g., "One reads in the dispatches of L'Unione Sarda that...").
     
     NARRATIVE AND STYLE RULES (CHATWIN REPORTER):
@@ -73,12 +75,13 @@ def generate_article(sources_data):
     - Surreal Connections (Juxtaposition): Connect global facts to Sardinian ones through brutal physical or chromatic similarities (e.g., the poison of ricin in Campobasso connected to the bitter taste of wild myrtle or the color of an obsolete software interface).
     
     ANTI-DRIFT RULES:
-    - BLACKLIST: It is STRICTLY FORBIDDEN to cite Abraham Lincoln, Virginia Woolf, Rachel Carson, the suffragettes, or Vannevar Bush. If you need a historical parallel, draw from real events cited in the articles or completely new eras (e.g., the Bronze Age, the Years of Lead, the 1929 Crisis).
-    - NO INTRODUCTIONS: Start the article directly with a physical image or a raw fact. No "Welcome to the neighborhood" or "Today we observe."
+    - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite Abraham Lincoln, Virginia Woolf, Rachel Carson, the suffragettes, or Vannevar Bush. If an original article cites them, IGNORE those names and focus on other protagonists. If you need a historical parallel, draw from real events cited in the articles or completely new eras (e.g., the Bronze Age, the Years of Lead, the 1929 Crisis).
+    - NO STANDARD TRANSITIONS: Eliminate lazy phrases like "This celebration of...", "Meanwhile...", "According to...". Use only sharp cuts or physical analogies (color, smell, temperature).
+    - NO INTRODUCTIONS: Start the article directly with a raw physical image and a news fact. No "Welcome to the neighborhood" or ceremonial introductions.
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
     - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, dry, and evocative phrase drawn from the physical details of the text.
     - Write ENTIRELY IN ENGLISH.
-    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing a visual scene that includes real subjects from the news (e.g., 'A grainy B&W photo of a military drone over a Sardinian coastline, high contrast, documentary style').
+    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing a brutal B&W photojournalism scene that unites two contrasting elements of the news (e.g., a loudspeaker in a meadow and a surgical scalpel). The image must not be a generic illustration.
     """
     response = model.generate_content(prompt)
     return response.text
