@@ -1,6 +1,5 @@
 ### `cron_scraper.py`
 
-```python
 import google.generativeai as genai
 import asyncio
 from scraper import scrape_all_sources
