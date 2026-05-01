@@ -54,9 +54,9 @@ SOURCES = {
     }
 }
 
-async def fetch_article_data(page, url):
+async def fetch_article_data(page, url, timeout=30000):
     try:
-        await page.goto(url, timeout=30000)
+        await page.goto(url, timeout=timeout)
         await page.wait_for_load_state("domcontentloaded")
         html = await page.content()
         soup = BeautifulSoup(html, "html.parser")
@@ -93,7 +93,7 @@ async def fetch_article_data(page, url):
     except Exception as e:
         return None
 
-async def scrape_all_sources():
+async def scrape_all_sources(timeout=30000):
     used_links = load_used_links()
     new_used_links = set(used_links)
     
@@ -128,7 +128,7 @@ async def scrape_all_sources():
                 section_url = source_info["base_url"] + section
                 print(f"-> Scanning section: {section_url}")
                 try:
-                    await page.goto(section_url, timeout=30000)
+                    await page.goto(section_url, timeout=timeout)
                     await page.wait_for_timeout(2000)
                     links = await page.query_selector_all(source_info["link_selector"])
                     
@@ -151,7 +151,7 @@ async def scrape_all_sources():
                     break
                     
                 print(f"   - Testing article: {url}")
-                text = await fetch_article_data(page, url)
+                text = await fetch_article_data(page, url, timeout=timeout)
                 if text:
                     print(f"     [+] Valid! Added to collection.")
                     valid_articles.append(text)

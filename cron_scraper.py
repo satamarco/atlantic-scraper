@@ -36,27 +36,21 @@ def save_to_archive(article_text, image_path):
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-def generate_article(sources_data):
+def generate_article(local_texts, intl_texts):
     model = genai.GenerativeModel('gemini-2.5-flash')
     
-    atlantic_texts = ", ".join(sources_data.get("the_atlantic", [])[:3])
-    nbc_texts = ", ".join(sources_data.get("nbc_news", [])[:3])
-    vice_texts = ", ".join(sources_data.get("vice", [])[:2])
-    
-    unione_texts = ", ".join(sources_data.get("unione_sarda", [])[:3])
-    sardinia_texts = ", ".join(sources_data.get("sardinia_post", [])[:2])
-    cronache_texts = ", ".join(sources_data.get("cronache_nuoresi", [])[:2])
+    local_str = "\n\n".join([f"- {t}" for t in local_texts])
+    intl_str = "\n\n".join([f"- {t}" for t in intl_texts])
     
     prompt = f"""
     You are a dark, obsessive, and poetic investigator (a visionary mind smoking in the dark, connecting red threads on a chaotic corkboard). 
-    Use the following data extracted from exactly 15 recent articles (8 international, 7 local Sardinian) across diverse news outlets:
+    Use the following data extracted from exactly 15 recent articles (8 local Sardinian, 7 international) across diverse news outlets:
     
-    [The Atlantic]: {atlantic_texts}
-    [NBC News]: {nbc_texts}
-    [Vice]: {vice_texts}
-    [L'Unione Sarda]: {unione_texts}
-    [Sardinia Post]: {sardinia_texts}
-    [Cronache Nuoresi]: {cronache_texts}
+    ### Fatti Globali (International Pool)
+    {intl_str}
+    
+    ### Fatti Sardi (Local Pool)
+    {local_str}
     
     Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as a continuous, hypnotic stream of consciousness without time.
     
@@ -64,8 +58,9 @@ def generate_article(sources_data):
     - ABSOLUTE ATEMPORALITY: NEVER use temporal expressions related to the current day (e.g., "today", "this morning", "Friday", "yesterday", "this Tuesday", "May 1"). Treat events as a continuous apocalypse.
     - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!). Never use them. The narrator never shouts.
     - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers.
-    - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the 15 articles (Sardinian politicians, towns, euro/dollar figures, US presidents). Use these extremely factual details to anchor the poetic delirium to concrete news.
-    - SARDINIA ANTI-CLICHÉ: Never paste pre-packaged descriptions or old analogies about Sardinian cities (e.g., "like the background hum of a chaotic Nuoro city council meeting... broken neon sign of a Cagliari bar"). If you cite Sardinia, you MUST rely ONLY on the extracted news and not invent or repeat old analogies.
+    - HARD SARDINIAN VALIDATION: YOU MUST explicitly mention the proper names, places, and facts from the 8 Sardinian articles provided. If you do not cite the local facts in at least 3 paragraphs, organically fusing them with the global news, the generation will fail.
+    - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the 15 articles. Use these extremely factual details to anchor the poetic delirium to concrete news.
+    - SARDINIA ANTI-CLICHÉ: Never paste pre-packaged descriptions or old analogies about Sardinian cities. If you cite Sardinia, you MUST rely ONLY on the extracted news and not invent or repeat old analogies.
     - THE LOGICAL DELIRIUM (EXTREME FUSION): EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together organically. Find impossible physical or chromatic connections between facts, but ground them in the real news data provided.
     
     NARRATIVE AND STYLE RULES (THE OBSESSIVE MONOLOGUE):
@@ -84,16 +79,55 @@ def generate_article(sources_data):
 
 async def main():
     print("Scraping multi-source started...")
-    sources_data = await scrape_all_sources()
-    print(f"Extracted from The Atlantic: {len(sources_data.get('the_atlantic', []))}")
-    print(f"Extracted from L'Unione Sarda: {len(sources_data.get('unione_sarda', []))}")
-    print(f"Extracted from Sardinia Post: {len(sources_data.get('sardinia_post', []))}")
-    print(f"Extracted from NBC News: {len(sources_data.get('nbc_news', []))}")
-    print(f"Extracted from Vice: {len(sources_data.get('vice', []))}")
-    print(f"Extracted from Cronache Nuoresi: {len(sources_data.get('cronache_nuoresi', []))}")
+    
+    max_retries = 3
+    timeout = 30000
+    local_pool = []
+    international_pool = []
+    
+    for attempt in range(max_retries):
+        print(f"--- Scraping Attempt {attempt + 1} (Timeout: {timeout}ms) ---")
+        sources_data = await scrape_all_sources(timeout=timeout)
+        
+        # Build pools
+        curr_local = []
+        curr_local.extend(sources_data.get("unione_sarda", []))
+        curr_local.extend(sources_data.get("sardinia_post", []))
+        curr_local.extend(sources_data.get("cronache_nuoresi", []))
+        
+        curr_intl = []
+        curr_intl.extend(sources_data.get("the_atlantic", []))
+        curr_intl.extend(sources_data.get("nbc_news", []))
+        curr_intl.extend(sources_data.get("vice", []))
+        
+        # Accumulate
+        local_pool.extend(curr_local)
+        international_pool.extend(curr_intl)
+        
+        # Remove duplicates just in case
+        local_pool = list(dict.fromkeys(local_pool))
+        international_pool = list(dict.fromkeys(international_pool))
+        
+        print(f"Current Pool Status -> Local: {len(local_pool)}/8 | International: {len(international_pool)}/7")
+        
+        if len(local_pool) >= 8 and len(international_pool) >= 7:
+            print("Hard Validation Passed! We have enough articles.")
+            break
+        else:
+            print("Hard Validation Failed. Not enough articles in the pools. Retrying...")
+            timeout += 15000  # Increase timeout for the next attempt
+            
+    # Hard limit to exact numbers requested
+    local_pool = local_pool[:8]
+    international_pool = international_pool[:7]
+    
+    if len(local_pool) < 8 or len(international_pool) < 7:
+        print("WARNING: Could not gather the exact number of required articles despite retries.")
+        
+    print(f"Final Validation: Local ({len(local_pool)}), International ({len(international_pool)})")
     
     print("Generating article and prompt...")
-    raw_response = generate_article(sources_data)
+    raw_response = generate_article(local_pool, international_pool)
     
     parts = raw_response.split("IMAGE_PROMPT:")
     article_content = parts[0].strip()
