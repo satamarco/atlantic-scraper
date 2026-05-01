@@ -36,6 +36,21 @@ SOURCES = {
         "base_url": "https://www.sardiniapost.it",
         "sections": ["/politica/", "/economia/", "/culture/", "/cronaca/"],
         "link_selector": "h3 a, .entry-title a"
+    },
+    "nbc_news": {
+        "base_url": "https://www.nbcnews.com",
+        "sections": ["/world", "/politics", "/health", "/tech", "/science"],
+        "link_selector": "h2 a, .v-f a"
+    },
+    "vice": {
+        "base_url": "https://www.vice.com/en",
+        "sections": ["/section/news", "/section/tech", "/section/culture"],
+        "link_selector": "h3 a, .hdg a"
+    },
+    "cronache_nuoresi": {
+        "base_url": "https://www.cronachenuoresi.it",
+        "sections": ["/category/cronaca/", "/category/politica/", "/category/cultura/"],
+        "link_selector": "h2 a, .entry-title a"
     }
 }
 
@@ -127,12 +142,12 @@ async def scrape_all_sources():
                 except Exception as e:
                     print(f"   [!] Failed scanning section {section_url}")
 
-            # Step 2: Fetch article details until we have exactly 5
+            # Step 2: Fetch article details until we have exactly 3 (roughly 18 total)
             collected_links = list(collected_links)
             random.shuffle(collected_links)
             
             for url in collected_links:
-                if len(valid_articles) >= 5:
+                if len(valid_articles) >= 3:
                     break
                     
                 print(f"   - Testing article: {url}")
@@ -147,7 +162,7 @@ async def scrape_all_sources():
                     new_used_links.add(url)
                     
             sources_data[source_name] = valid_articles
-            print(f"-> Completed {source_name}: {len(valid_articles)}/5 articles collected.")
+            print(f"-> Completed {source_name}: {len(valid_articles)}/3 articles collected.")
             
         await browser.close()
         
