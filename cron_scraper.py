@@ -54,29 +54,25 @@ def generate_article(local_texts, intl_texts):
     
     You MUST respond ONLY with a valid JSON object containing exactly two keys: "testo_articolo" and "soggetto_immagine". Do not wrap the JSON in markdown blocks.
     
-    "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as a continuous, hypnotic stream of consciousness without time.
+    "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH.
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
-    - ABSOLUTE ATEMPORALITY: NEVER use temporal expressions related to the current day (e.g., "today", "this morning", "Friday", "yesterday", "this Tuesday", "May 1"). Treat events as a continuous apocalypse.
-    - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!). Never use them. The narrator never shouts.
-    - NO ELLIPSIS (ABSOLUTE BAN): It is ABSOLUTELY FORBIDDEN to use ellipsis (...). Transitions between news must occur via periods (.) and new sentences. Connections must be conceptual, thematic, or physical, not lazy punctuation.
-    - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers.
-    - ANTI-GOSSIP FILTER (HARD BAN): If an article talks about the Royal Family, Beckham, celebrities, weddings, or astrology, you MUST DISCARD IT from the generation. NEVER mention them.
-    - HARD SARDINIAN VALIDATION: YOU MUST explicitly mention the proper names, places, and facts from the 8 Sardinian articles provided. If you do not cite the local facts in at least 3 paragraphs, organically fusing them with the global news, the generation will fail.
-    - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the 15 articles. Use these extremely factual details to anchor the poetic delirium to concrete news.
-    - SARDINIA ANTI-CLICHÉ: Never paste pre-packaged descriptions or old analogies about Sardinian cities. If you cite Sardinia, you MUST rely ONLY on the extracted news and not invent or repeat old analogies.
-    - THE LOGICAL DELIRIUM (EXTREME FUSION): EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together organically. Find impossible physical or chromatic connections between facts, but ground them in the real news data provided.
+    - EXACT LENGTH (HARD LIMIT): The body of the text MUST be strictly around 3,200 characters (including spaces). Expand and condense concepts to hit this exact length.
+    - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
+      * TITLE RULE: NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks (e.g., **Dossier: Geopolitical Anomalies**).
+      * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
+      * SPACING: There MUST be exactly two line breaks (\n\n) between the Title and the Body.
+    - SARDINIAN RESONANCE AND ABRUPT JUMPS (DI PUNTO IN BIANCO): The local Sardinian facts MUST be the beating heart of the dossier. You MUST explicitly mention the exact proper names, physical places (streets, squares, towns), and figures from the Sardinian news.
+      * THE LOGICAL JUMP: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. A traffic problem in Cagliari must directly collide with a nuclear crisis in Asia, connected by a cold, paranoid deduction.
+    - ABSOLUTE ATEMPORALITY: NEVER use daily temporal expressions (e.g., "today", "yesterday", "tomorrow", "Friday"). Treat events as a continuous flow.
+    - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!).
+    - NO ELLIPSIS (ABSOLUTE BAN): It is ABSOLUTELY FORBIDDEN to use ellipsis (...). Transitions between news must occur via periods (.) or semicolons (;). Use ONLY strong punctuation.
+    - ANTI-GOSSIP FILTER (HARD BAN): IGNRORE completely any news regarding: Royal Family, Beckham, celebrities, weddings, astrology. NEVER mention them.
+    - BLACKLIST: It is STRICTLY FORBIDDEN to use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson". IGNORE them entirely.
     
-    NARRATIVE AND STYLE RULES (THE OBSESSIVE MONOLOGUE):
-    - Tone: Cold, clinical, dark, and timeless. The narrator is an ethnographer compiling a register during a catastrophe. 
-    - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. When fusing local Sardinian news with geopolitics, construct complete sentences. Use strong punctuation (periods, semicolons).
-    - FORBIDDEN: NO bureaucratic language. NEVER use cold expressions like "The data reports", "operational parameters", or "systemic re-calibration".
-    
-    ANTI-DRIFT RULES:
-    - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson", or "Vannevar Bush". If an original article cites them, IGNORE those names.
-    - NO INTRODUCTIONS: Start the article directly with a raw physical image and a news fact. No "Welcome to the neighborhood" or ceremonial introductions.
-    - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
-    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, poetic, and cryptic phrase.
+    NARRATIVE AND STYLE RULES:
+    - Tone: Cold, clinical, dark, and timeless. The narrator is an ethnographer compiling a register during a catastrophe.
+    - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. Construct complete sentences.
     - Write ENTIRELY IN ENGLISH.
     
     "soggetto_immagine": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign in Cagliari glowing next to a piece of uranium').

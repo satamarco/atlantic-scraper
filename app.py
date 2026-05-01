@@ -118,7 +118,7 @@ def render_article():
                         
                         content = entry.get('content', '')
                         lines = content.strip().split('\n')
-                        title = lines[0].lstrip('#').strip() if lines else ""
+                        title = lines[0].replace('*', '').strip() if lines else ""
                         body = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ""
                         
                         st.markdown(f"<div class='article-container' style='font-weight:bold; margin-bottom: 1rem;'>{title}</div>", unsafe_allow_html=True)
