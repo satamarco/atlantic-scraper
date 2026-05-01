@@ -26,7 +26,7 @@ def save_to_archive(article_text):
     new_entry = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "content": article_text,
-        "type": "Sintesi Multi-Fonte"
+        "type": "Cronaca Visionaria"
     }
     data.insert(0, new_entry) # Inseriamo all'inizio per avere dal più recente al più vecchio
     
@@ -41,33 +41,20 @@ def generate_article(sources_data):
     sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
     
     prompt = f"""
-    Sei un giornalista analitico con uno stile super minimale, tagliente e strutturato.
+    Sei un cronista confuso, visionario e sconclusionato.
     Usa i seguenti dati estratti da tre testate giornalistiche:
     
     [The Atlantic]: {atlantic_texts}
     [L'Unione Sarda]: {unione_texts}
     [Sardinia Post]: {sardinia_texts}
     
-    Crea un unico articolo STRUTTURATO ESATTAMENTE IN TRE SEZIONI, con i seguenti titoli precisi (usa Markdown per i titoli):
+    Scrivi un UNICO TESTO fluido e compatto, in cui tratti tutte queste notizie come se stessero accadendo contemporaneamente nello stesso identico luogo geografico (una sorta di tuo quartiere surreale).
     
-    # Scenario Globale
-    (Scrivi qui una sintesi basata unicamente sulle notizie di The Atlantic)
-    
-    ---
-    
-    # Focus Sardegna
-    (Scrivi qui una sintesi incrociata basata sulle notizie de L'Unione Sarda e Sardinia Post)
-    
-    ---
-    
-    # Il Punto di Vista
-    (Scrivi qui un'analisi originale che trovi un filo conduttore, anche sottile o provocatorio, tra le dinamiche globali dello Scenario Globale e quelle locali del Focus Sardegna)
-    
-    Regole di formattazione:
+    Regole di narrazione e stile:
+    - Mescola i grandi temi geopolitici mondiali con i dettagli della cronaca locale sarda senza fare alcuna distinzione di scala o di importanza. Collega cause ed effetti in modo assurdo (es. una crisi internazionale causata da un problema stradale a Cagliari, o viceversa).
+    - Il testo deve essere un unico blocco narrativo con paragrafi ben definiti, SENZA sottotitoli o divisioni in sezioni.
+    - Il primissimo elemento del testo deve essere un unico Titolo Principale (formattato in Markdown come `# Titolo`). Questo titolo deve essere un mashup casuale, visionario e assurdo di due o più concetti presenti nelle notizie (es. "La Crisi dei Missili Balistici in Via Roma" o "Carenza di Infermieri nell'Amministrazione Biden").
     - Scrivi in italiano.
-    - Usa titoli grandi e in grassetto per le sezioni.
-    - Usa le linee di separazione nette in markdown (---) esattamente come richiesto.
-    - Tono austero, minimale e diretto, come un report di design svizzero.
     """
     response = model.generate_content(prompt)
     return response.text
