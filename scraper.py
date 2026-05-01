@@ -29,12 +29,12 @@ SOURCES = {
     },
     "unione_sarda": {
         "base_url": "https://www.unionesarda.it",
-        "sections": ["/politica/", "/economia/", "/cronaca/"],
+        "sections": ["/news-sardegna/", "/tempo-libero/", "/cultura/"],
         "link_selector": "article a, h2 a, h3 a"
     },
     "sardinia_post": {
         "base_url": "https://www.sardiniapost.it",
-        "sections": ["/politica/", "/economia/", "/cronaca/"],
+        "sections": ["/category/cucina-e-cibo/", "/category/culture/", "/category/eventi/"],
         "link_selector": "h3 a, .entry-title a"
     },
     "nbc_news": {
@@ -49,7 +49,7 @@ SOURCES = {
     },
     "cronache_nuoresi": {
         "base_url": "https://www.cronachenuoresi.it",
-        "sections": ["/category/cronaca/", "/category/politica/", "/category/economia/"],
+        "sections": ["/category/cultura-e-societa/", "/category/eventi/"],
         "link_selector": "h2 a, .entry-title a"
     }
 }
