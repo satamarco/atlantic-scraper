@@ -7,6 +7,12 @@ import json
 from datetime import datetime
 from dotenv import load_dotenv
 
+@st.cache_resource
+def install_playwright_browsers():
+    os.system("playwright install chromium")
+
+install_playwright_browsers()
+
 load_dotenv()
 
 # Configurazione API Gemini (assicurati di avere la chiave nel tuo ambiente)
