@@ -57,21 +57,23 @@ def generate_article(local_texts, intl_texts):
     "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH.
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
-    - EXACT LENGTH (HARD LIMIT): The body of the text MUST be strictly around 3,200 characters (including spaces). Expand and condense concepts to hit this exact length.
+    - EXACT LENGTH (HARD LIMIT): The body of the text MUST be strictly around 2,800 characters (including spaces). Expand and condense concepts to hit this exact length. The text must be punchier and more concise.
     - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
       * TITLE RULE: NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks (e.g., **Dossier: Geopolitical Anomalies**).
       * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
       * SPACING: There MUST be exactly two line breaks (\n\n) between the Title and the Body.
-    - SARDINIAN RESONANCE AND ABRUPT JUMPS (DI PUNTO IN BIANCO): The local Sardinian facts MUST be the beating heart of the dossier. You MUST explicitly mention the exact proper names, physical places (streets, squares, towns), and figures from the Sardinian news.
-      * THE LOGICAL JUMP: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. A traffic problem in Cagliari must directly collide with a nuclear crisis in Asia, connected by a cold, paranoid deduction.
+    - SARDINIAN RESONANCE AND ABRUPT JUMPS (DI PUNTO IN BIANCO): The local Sardinian facts MUST be the beating heart of the dossier.
+      * THE LOGICAL JUMP: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. Connect them using dark irony; let the sheer absurdity of the juxtaposition speak for itself.
     - ABSOLUTE ATEMPORALITY: NEVER use daily temporal expressions (e.g., "today", "yesterday", "tomorrow", "Friday"). Treat events as a continuous flow.
     - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!).
     - NO ELLIPSIS (ABSOLUTE BAN): It is ABSOLUTELY FORBIDDEN to use ellipsis (...). Transitions between news must occur via periods (.) or semicolons (;). Use ONLY strong punctuation.
-    - ANTI-GOSSIP FILTER (HARD BAN): IGNRORE completely any news regarding: Royal Family, Beckham, celebrities, weddings, astrology. NEVER mention them.
+    - ANTI-GOSSIP FILTER (HARD BAN): IGNORE completely any news regarding: Royal Family, Beckham, celebrities, weddings, astrology. NEVER mention them.
     - BLACKLIST: It is STRICTLY FORBIDDEN to use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson". IGNORE them entirely.
     
     NARRATIVE AND STYLE RULES:
-    - Tone: Cold, clinical, dark, and timeless. The narrator is an ethnographer compiling a register during a catastrophe.
+    - Tone: The Fatalistic Observer. You are a cynical, fatalistic, and slightly sarcastic observer of human absurdity.
+    - Interpretation: Do not just list facts; interpret them darkly. When mentioning numbers, budgets, or political appointments, add a layer of pessimistic commentary (e.g., instead of just reporting a 3.4 million euro profit, comment on how meaningless such fiscal precision is when global markets are betting billions on an impending war).
+    - Density: Reduce the density of numbers and names. You must still use the facts from the articles, but don't overwhelm the text with lists of every single politician's portfolio or exact percentages unless they serve the fatalistic narrative. Focus on the meaning of the events rather than an exhaustive cataloging.
     - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. Construct complete sentences.
     - Write ENTIRELY IN ENGLISH.
     
