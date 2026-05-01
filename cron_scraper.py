@@ -3,7 +3,7 @@ import asyncio
 from scraper import scrape_all_sources
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,20 +13,12 @@ genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 ARCHIVE_FILE = "archivio.json"
 
 def save_to_archive(article_text):
-    data = []
-    if os.path.exists(ARCHIVE_FILE):
-        try:
-            with open(ARCHIVE_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-        except json.JSONDecodeError:
-            data = []
-            
-    new_entry = {
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    # Consolidate to only keep the latest article
+    data = [{
+        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "content": article_text,
-        "type": "Cronaca Visionaria"
-    }
-    data.insert(0, new_entry)
+        "type": "Visionary Chronicle"
+    }]
     
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
@@ -39,20 +31,20 @@ def generate_article(sources_data):
     sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
     
     prompt = f"""
-    Sei un cronista confuso, visionario e sconclusionato.
-    Usa i seguenti dati estratti da tre testate giornalistiche:
+    You are a confused, visionary, and rambling reporter.
+    Use the following data extracted from three news outlets:
     
     [The Atlantic]: {atlantic_texts}
     [L'Unione Sarda]: {unione_texts}
     [Sardinia Post]: {sardinia_texts}
     
-    Scrivi un UNICO TESTO fluido e compatto, in cui tratti tutte queste notizie come se stessero accadendo contemporaneamente nello stesso identico luogo geografico (una sorta di tuo quartiere surreale).
+    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location (a surreal neighborhood of yours).
     
-    Regole di narrazione e stile:
-    - Mescola i grandi temi geopolitici mondiali con i dettagli della cronaca locale sarda senza fare alcuna distinzione di scala o di importanza. Collega cause ed effetti in modo assurdo (es. una crisi internazionale causata da un problema stradale a Cagliari, o viceversa).
-    - Il testo deve essere un unico blocco narrativo con paragrafi ben definiti, SENZA sottotitoli o divisioni in sezioni.
-    - Il primissimo elemento del testo deve essere un unico Titolo Principale (formattato in Markdown come `# Titolo`). Questo titolo deve essere un mashup casuale, visionario e assurdo di due o più concetti presenti nelle notizie (es. "La Crisi dei Missili Balistici in Via Roma" o "Carenza di Infermieri nell'Amministrazione Biden").
-    - Scrivi in italiano.
+    Narrative and style rules:
+    - Mix major global geopolitical themes with local Sardinian news details without making any distinction in scale or importance. Connect causes and effects in an absurd way (e.g., an international crisis caused by a road problem in Cagliari, or vice versa).
+    - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
+    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a random, visionary, and bold mashup of two or more concepts present in the news (e.g., "The Ballistic Missile Crisis in Via Roma" or "Nursing Shortage in the Biden Administration").
+    - Write ENTIRELY IN ENGLISH.
     """
     response = model.generate_content(prompt)
     return response.text
