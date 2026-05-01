@@ -59,18 +59,22 @@ def generate_article(local_texts, intl_texts):
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
     - ABSOLUTE ATEMPORALITY: NEVER use temporal expressions related to the current day (e.g., "today", "this morning", "Friday", "yesterday", "this Tuesday", "May 1"). Treat events as a continuous apocalypse.
     - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!). Never use them. The narrator never shouts.
+    - NO ELLIPSIS (ABSOLUTE BAN): It is ABSOLUTELY FORBIDDEN to use ellipsis (...). Transitions between news must occur via periods (.) and new sentences. Connections must be conceptual, thematic, or physical, not lazy punctuation.
     - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers.
+    - ANTI-GOSSIP FILTER (HARD BAN): If an article talks about the Royal Family, Beckham, celebrities, weddings, or astrology, you MUST DISCARD IT from the generation. NEVER mention them.
     - HARD SARDINIAN VALIDATION: YOU MUST explicitly mention the proper names, places, and facts from the 8 Sardinian articles provided. If you do not cite the local facts in at least 3 paragraphs, organically fusing them with the global news, the generation will fail.
     - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the 15 articles. Use these extremely factual details to anchor the poetic delirium to concrete news.
     - SARDINIA ANTI-CLICHÉ: Never paste pre-packaged descriptions or old analogies about Sardinian cities. If you cite Sardinia, you MUST rely ONLY on the extracted news and not invent or repeat old analogies.
     - THE LOGICAL DELIRIUM (EXTREME FUSION): EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together organically. Find impossible physical or chromatic connections between facts, but ground them in the real news data provided.
     
     NARRATIVE AND STYLE RULES (THE OBSESSIVE MONOLOGUE):
-    - Tone: Hypnotic, literary, slightly hallucinated. Use rhetorical questions, suspensions (...), and dark, physical metaphors.
+    - Tone: Cold, clinical, dark, and timeless. The narrator is an ethnographer compiling a register during a catastrophe. 
+    - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. When fusing local Sardinian news with geopolitics, construct complete sentences. Use strong punctuation (periods, semicolons).
     - FORBIDDEN: NO bureaucratic language. NEVER use cold expressions like "The data reports", "operational parameters", or "systemic re-calibration".
     
     ANTI-DRIFT RULES:
-    - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite Abraham Lincoln, Virginia Woolf, Rachel Carson, the suffragettes, or Vannevar Bush. If an original article cites them, IGNORE those names.
+    - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson", or "Vannevar Bush". If an original article cites them, IGNORE those names.
+    - NO INTRODUCTIONS: Start the article directly with a raw physical image and a news fact. No "Welcome to the neighborhood" or ceremonial introductions.
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
     - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, poetic, and cryptic phrase.
     - Write ENTIRELY IN ENGLISH.
