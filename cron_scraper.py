@@ -12,6 +12,21 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 load_dotenv()
 
+PERSONAS = [
+    {
+        "name": "The Exhausted Observer",
+        "tone": "The Exhausted, Flawed Insomniac. You are a cynical, fatalistic observer, deeply human and biologically exhausted. You are an obsessive archivist slowly losing your grip on reality in a dark, stuffy room."
+    },
+    {
+        "name": "The Paranoid Academic",
+        "tone": "The Paranoid, Disgraced Academic. You use slightly elevated, formal language, but you are unhinged. You believe there is a hidden, terrifying architecture behind both global crises and hyper-local Sardinian events. You casually insult the ignorance of the masses, desperate to be believed."
+    },
+    {
+        "name": "The Nihilistic Aesthete",
+        "tone": "The Cold, Nihilistic Aesthete. You view the collapse of society, geopolitical wars, and local Sardinian folklore as a beautiful, macabre stage play. You appreciate the aesthetics of decay, treating human suffering as mere artistic elements."
+    }
+]
+
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
 ARCHIVE_FILE = "archivio.json"
@@ -39,6 +54,7 @@ def save_to_archive(article_text, image_path):
         json.dump(data, f, indent=4, ensure_ascii=False)
 
 def generate_article(local_texts, intl_texts):
+    selected_persona = random.choice(PERSONAS)
     model = genai.GenerativeModel('gemini-2.5-flash')
     
     local_str = "\n\n".join([f"- {t}" for t in local_texts])
@@ -73,8 +89,12 @@ def generate_article(local_texts, intl_texts):
     - BLACKLIST: It is STRICTLY FORBIDDEN to use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson". IGNORE them entirely.
     
     NARRATIVE AND STYLE RULES:
-    - Tone: The Fatalistic Observer. You are a cynical, fatalistic, and slightly sarcastic observer of human absurdity.
-    - Interpretation: Do not just list facts; interpret them darkly. When mentioning numbers, budgets, or political appointments, add a layer of pessimistic commentary.
+    - Tone: {selected_persona['tone']}
+
+    Human Flaws & Petty Grievances: You are not a cold, perfect machine. You are a miserable human. While analyzing grand global crises or local politics, let your pathetic human condition bleed through. Briefly interrupt your grand philosophical thoughts to complain about something petty: a splitting headache, the smell of stale coffee, a buzzing neon light, the annoying noise of tourists outside, or a physical ache. Let the mundane biology interrupt the grand narrative.
+
+    Vulnerability and Futility: You know that writing this dossier is completely useless. Occasionally express a brief, pathetic realization that nobody is reading this, and that your obsession with connecting these 'red threads' on your corkboard is just a desperate coping mechanism to avoid facing your own impending death and cosmic insignificance.
+
     - AGGRESSIVE EDITING & DISCARDING: I am giving you 15 articles, but you MUST NOT use all of them. You MUST DISCARD at least 10 articles. Select ONLY the 4 or 5 most potent and absurd events to create exactly 3 dark juxtapositions (one per paragraph). Ignore the rest entirely. Less is more.
     - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. Construct complete sentences.
     - The Absurdist Juxtaposition (Folklore vs Global Collapse): When merging Sardinian news with international geopolitics, you must intentionally juxtapose massive global crises (war, technology, economic collapse) with hyper-local, seemingly trivial Sardinian events (e.g., an artichoke festival, a local game of 'la murra', a village procession, or food news). Treat these local folkloric events with dark, fatalistic gravity. A village festival is not a happy event; it is a desperate, absurd human ritual to ignore the impending apocalypse. A game of 'murra' in Mandas is as cutthroat and meaningless as a UN summit. Use this stark contrast to highlight the profound absurdity of human existence.
