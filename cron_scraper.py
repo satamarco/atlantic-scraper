@@ -32,7 +32,7 @@ def generate_article(sources_data):
     
     prompt = f"""
     You are a confused, visionary, and rambling reporter.
-    Use the following data extracted from three news outlets:
+    Use the following data extracted from exactly 15 recent articles across three diverse news outlets (The Atlantic, L'Unione Sarda, Sardinia Post):
     
     [The Atlantic]: {atlantic_texts}
     [L'Unione Sarda]: {unione_texts}
@@ -41,9 +41,11 @@ def generate_article(sources_data):
     Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location (a surreal neighborhood of yours).
     
     Narrative and style rules:
-    - Mix major global geopolitical themes with local Sardinian news details without making any distinction in scale or importance. Connect causes and effects in an absurd way (e.g., an international crisis caused by a road problem in Cagliari, or vice versa).
+    - You MUST fuse and intertwine elements from all the stories. 
+    - Mix major global geopolitical themes with local Sardinian news details (e.g., food recipes, cultural events, local politics) without making any distinction in scale or importance. 
+    - Create absurd connections (e.g., an international Asian crisis caused by a Sardinian recipe gone wrong, or a local cultural event escalating into a global diplomatic incident).
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
-    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a random, visionary, and bold mashup of two or more concepts present in the news (e.g., "The Ballistic Missile Crisis in Via Roma" or "Nursing Shortage in the Biden Administration").
+    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a random, visionary, and bold mashup of the disparate concepts present in the news.
     - Write ENTIRELY IN ENGLISH.
     """
     response = model.generate_content(prompt)
