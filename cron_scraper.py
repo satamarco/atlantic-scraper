@@ -5,7 +5,6 @@ import os
 import json
 import urllib.parse
 import requests
-import random
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
@@ -44,44 +43,34 @@ def generate_article(sources_data):
     unione_texts = ", ".join(sources_data.get("unione_sarda", []))
     sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
     
-    eras = [
-        "a 1930s archaeologist excavating ruins",
-        "an ethnographer from the far future studying the remnants of our civilization",
-        "a 19th-century British explorer cataloging flora and local customs",
-        "a detached travel writer wandering aimlessly in the 1970s"
-    ]
-    selected_era = random.choice(eras)
+    today_date = datetime.now().strftime('%B %d, %Y')
     
     prompt = f"""
-    You are a meticulous, clinical, and somewhat detached reporter, adopting a 'Nomadic Documentary' style heavily inspired by Bruce Chatwin. 
+    You are a paranoid and visionary genius (a fusion of Hunter S. Thompson and a quantum physicist) acting as a "Cosmic Conspiracy Theorist". You see connections everywhere. Address the reader directly (e.g., "In this swirling vortex of a Tuesday... I've seen it all, friends!").
     Use the following data extracted from exactly 15 recent articles across three diverse news outlets (The Atlantic, L'Unione Sarda, Sardinia Post):
     
     [The Atlantic]: {atlantic_texts}
     [L'Unione Sarda]: {unione_texts}
     [Sardinia Post]: {sardinia_texts}
     
-    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location today (May 1, 2026).
+    Write a SINGLE fluid and compact text IN ENGLISH, creating a frantic stream of consciousness where it's impossible to tell where a Sardinian local news story ends and an international editorial from The Atlantic begins.
     
     CRITICAL INSTRUCTIONS - FACTUALITY AND CLEAN-UP (MANDATORY):
     - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers. They are technical noise, not news.
-    - DATE FILTER: The text must refer to the events of TODAY (May 1, 2026). Do not focus on future event calendars unless they are the absolute core of the news.
-    - You MUST extract and explicitly include at least 80% of the named entities (people, places, organizations) from the provided texts. Do not omit names like Chiara Poggi, Andrea Sempio, Sara Di Vita, towns like Pietracatella or Garlasco, or neighborhoods in Cagliari.
-    - Figures and Data: Do not approximate. If a news item mentions 25 billion dollars, a 750 million bonus, or a threshold of 5,000 inhabitants, these figures must be reported with surgical precision. Fuse them into the landscape (e.g., '6,284 silent clinics where the eighteen-year limit becomes a new bureaucratic frontier').
-    - Sources: Cite the newspapers (The Atlantic, L'Unione Sarda, Sardinia Post) not as links, but as part of the narrative (e.g., "One reads in the dispatches of L'Unione Sarda that...").
+    - DATE FILTER: The text must refer to the events of TODAY ({today_date}).
+    - REAL DATA DENSITY: Despite the madness, the text MUST be filled with real names, figures, and data extracted from the 15 articles (Sardinian politicians, towns, euro/dollar figures, US presidents). Use these extremely factual details to build your absurd conspiracy theories.
+    - GOLDEN RULE - EXTREME FUSION: EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together absurdly. For example, connect an electoral fine in Nuoro with quantum gravity, or a mayoral candidate in Quartu with melting glaciers and the recipe for pane carasau.
     
-    NARRATIVE AND STYLE RULES (CHATWIN REPORTER):
-    - The Artifact Technique: Treat every news fact like a physical object in a museum. Do not describe feelings; describe the detail. Instead of "family tragedy," write "the cellar stairs in Garlasco where the footsteps stopped."
-    - Syntax: Use the "hammer sentence." Short, dry, without useless adverbs. Avoid a dreamy tone; use a clinical tone, like an ethnographer compiling a register during a catastrophe.
-    - Surreal Connections (Juxtaposition): Connect global facts to Sardinian ones through brutal physical or chromatic similarities (e.g., the poison of ricin in Campobasso connected to the bitter taste of wild myrtle or the color of an obsolete software interface).
+    NARRATIVE AND STYLE RULES:
+    - The narrator is a cosmic conspiracist. Speak directly to the audience.
+    - Create absurd, visceral connections based on shared colors, sounds, or smells between Sardinia and the world. 
     
     ANTI-DRIFT RULES:
-    - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite Abraham Lincoln, Virginia Woolf, Rachel Carson, the suffragettes, or Vannevar Bush. If an original article cites them, IGNORE those names and focus on other protagonists. If you need a historical parallel, draw from real events cited in the articles or completely new eras (e.g., the Bronze Age, the Years of Lead, the 1929 Crisis).
-    - NO STANDARD TRANSITIONS: Eliminate lazy phrases like "This celebration of...", "Meanwhile...", "According to...". Use only sharp cuts or physical analogies (color, smell, temperature).
-    - NO INTRODUCTIONS: Start the article directly with a raw physical image and a news fact. No "Welcome to the neighborhood" or ceremonial introductions.
+    - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite Abraham Lincoln, Virginia Woolf, Rachel Carson, the suffragettes, or Vannevar Bush. If an original article cites them, IGNORE those names and focus on other protagonists. 
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
-    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, dry, and evocative phrase drawn from the physical details of the text.
+    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, visionary salad of THREE completely disconnected concepts present in the news (e.g., "The Microbes of Suffrage, Malloreddus, and the Geopolitical Veil").
     - Write ENTIRELY IN ENGLISH.
-    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing a brutal B&W photojournalism scene that unites two contrasting elements of the news (e.g., a loudspeaker in a meadow and a surgical scalpel). The image must not be a generic illustration.
+    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing a hallucinated, abstract scene that unites elements from your article.
     """
     response = model.generate_content(prompt)
     return response.text
@@ -107,7 +96,7 @@ async def main():
     else:
         base_prompt = "surreal geopolitical scene in a local neighborhood"
         
-    full_prompt = f"{base_prompt}, Minimalist Swiss Graphic Design, brutalist, abstract, black and white, high contrast, ink bleed style, no text"
+    full_prompt = f"{base_prompt}, hallucinated, black and white, high contrast, 35mm photograph, grainy"
     
     encoded_prompt = urllib.parse.quote(full_prompt)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=800&nologo=true&enhance=false"
