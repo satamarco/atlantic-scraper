@@ -157,4 +157,3 @@ while True:
     time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
     countdown_placeholder.markdown(f"<div class='countdown-text'>{time_str}</div>", unsafe_allow_html=True)
     time.sleep(1)
-```
