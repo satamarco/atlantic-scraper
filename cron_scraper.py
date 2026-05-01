@@ -45,42 +45,33 @@ def generate_article(sources_data):
     sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
     
     eras = [
-        "the Renaissance", 
-        "the Cold War", 
-        "1920s Futurism", 
-        "Ancient Rome", 
-        "the Beat Generation"
+        "a 1930s archaeologist excavating ruins",
+        "an ethnographer from the far future studying the remnants of our civilization",
+        "a 19th-century British explorer cataloging flora and local customs",
+        "a detached travel writer wandering aimlessly in the 1970s"
     ]
     selected_era = random.choice(eras)
     
-    voices = [
-        "A cryptic military dispatch",
-        "A hallucinated botanical diary",
-        "A review of a punk record that never existed",
-        "The minutes of an intergalactic condominium assembly"
-    ]
-    selected_voice = random.choice(voices)
-    
     prompt = f"""
-    You are a confused, visionary, and rambling reporter.
+    You are a cultured, slightly detached traveler, observing the world as if it were an open-air museum. Your writing style is heavily inspired by Bruce Chatwin.
     Use the following data extracted from exactly 15 recent articles across three diverse news outlets (The Atlantic, L'Unione Sarda, Sardinia Post):
     
     [The Atlantic]: {atlantic_texts}
     [L'Unione Sarda]: {unione_texts}
     [Sardinia Post]: {sardinia_texts}
     
-    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location (a surreal neighborhood of yours).
+    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as if they were happening simultaneously in the exact same geographical location.
     
     Narrative and style rules:
-    - LENS & VOICE: Write the entire piece strictly in the style of: {selected_voice}.
-    - HISTORICAL ANCHOR: Ground your surreal metaphors and analogies in the aesthetics and themes of: {selected_era}.
-    - PROHIBITION OF CLICHÉS: DO NOT EVER cite Virginia Woolf, Rachel Carson, or Abraham Lincoln. If you need historical, literary, or scientific parallels, find new and unexpected ones (e.g., Borges, Calvino, Darwin, Ada Lovelace, etc.).
-    - INTEGRATION OF NEWS: You MUST fuse and intertwine elements from all the stories unpredictably. Do not use lazy transitions like "And speaking of...". Create absurd, visceral connections based on shared colors, sounds, or smells between Sardinia and the world. 
-    - Mix major global geopolitical themes with local Sardinian news details (e.g., food recipes, cultural events, local politics) without making any distinction in scale or importance.
+    - PROSA (PROSE): Use short, dry, precise sentences. Avoid exaggeration, melodrama, and sarcasm. 
+    - THE LENS: Write the entire piece adopting the perspective of {selected_era}.
+    - PHYSICAL DETAILS: Do not explain the news. Instead, describe objects, textures, or landscapes that represent them (e.g., instead of discussing an economic crisis, describe the color of a crumpled banknote in a Cagliari market).
+    - CONNECTIONS: Connect the 15 facts (Sardinia + World) through historical or material coincidences, without using banal conjunctions.
+    - PROHIBITION OF CLICHÉS: DO NOT EVER cite Abraham Lincoln, Virginia Woolf, Rachel Carson, or the suffragettes. If you need historical, literary, or scientific parallels, find new and unexpected ones (e.g., Borges, Calvino, Darwin, Ada Lovelace, etc.).
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
-    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a random, visionary, and bold mashup of the disparate concepts present in the news.
+    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, dry, and evocative phrase drawn from the physical details of the text.
     - Write ENTIRELY IN ENGLISH.
-    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing an abstract image that captures the essence of your article.
+    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing a visual scene that captures the essence of your article.
     """
     response = model.generate_content(prompt)
     return response.text
@@ -103,7 +94,7 @@ async def main():
     else:
         base_prompt = "surreal geopolitical scene in a local neighborhood"
         
-    full_prompt = f"{base_prompt}, Minimalist Swiss Graphic Design, brutalist, abstract, black and white, high contrast, ink bleed style, no text"
+    full_prompt = f"{base_prompt}, Black and white photography, grainy texture, documentary style, found objects, minimalist landscape, high contrast"
     
     encoded_prompt = urllib.parse.quote(full_prompt)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=800&nologo=true&enhance=false"
