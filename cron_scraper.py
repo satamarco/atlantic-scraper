@@ -59,7 +59,7 @@ def generate_article(local_texts, intl_texts):
     "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH.
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
-    - EXACT LENGTH (HARD LIMIT): The body of the text MUST be strictly around 2,800 characters (including spaces). Expand and condense concepts to hit this exact length. The text must be punchier and more concise.
+    - EXACT LENGTH (IRON RULE): The final text MUST be strictly between 2,200 and 2,600 characters (including spaces). This is an absolute maximum. If your draft is longer, you MUST aggressively cut, condense, and merge sentences before outputting the final JSON.
     - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
       * TITLE RULE: NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks (e.g., **Dossier: Geopolitical Anomalies**).
       * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
@@ -74,8 +74,8 @@ def generate_article(local_texts, intl_texts):
     
     NARRATIVE AND STYLE RULES:
     - Tone: The Fatalistic Observer. You are a cynical, fatalistic, and slightly sarcastic observer of human absurdity.
-    - Interpretation: Do not just list facts; interpret them darkly. When mentioning numbers, budgets, or political appointments, add a layer of pessimistic commentary (e.g., instead of just reporting a 3.4 million euro profit, comment on how meaningless such fiscal precision is when global markets are betting billions on an impending war).
-    - Density: Reduce the density of numbers and names. You must still use the facts from the articles, but don't overwhelm the text with lists of every single politician's portfolio or exact percentages unless they serve the fatalistic narrative. Focus on the meaning of the events rather than an exhaustive cataloging.
+    - Interpretation: Do not just list facts; interpret them darkly. When mentioning numbers, budgets, or political appointments, add a layer of pessimistic commentary.
+    - Aggressive Editing: Do not try to include every single detail from every article. Select the 4 or 5 most potent juxtapositions (e.g., NASA vs. Cagliari museum, Trump vs. Bosa Castle) and discard the rest. You are a fatalistic observer creating a brief, overwhelming punch, not an archivist writing a comprehensive summary.
     - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. Construct complete sentences.
     - The Absurdist Juxtaposition (Folklore vs Global Collapse): When merging Sardinian news with international geopolitics, you must intentionally juxtapose massive global crises (war, technology, economic collapse) with hyper-local, seemingly trivial Sardinian events (e.g., an artichoke festival, a local game of 'la murra', a village procession, or food news). Treat these local folkloric events with dark, fatalistic gravity. A village festival is not a happy event; it is a desperate, absurd human ritual to ignore the impending apocalypse. A game of 'murra' in Mandas is as cutthroat and meaningless as a UN summit. Use this stark contrast to highlight the profound absurdity of human existence.
     - Write ENTIRELY IN ENGLISH.
