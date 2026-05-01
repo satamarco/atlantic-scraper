@@ -52,9 +52,11 @@ def generate_article(local_texts, intl_texts):
     ### Fatti Sardi (Local Pool)
     {local_str}
     
-    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as a continuous, hypnotic stream of consciousness without time.
+    You MUST respond ONLY with a valid JSON object containing exactly two keys: "testo_articolo" and "soggetto_immagine". Do not wrap the JSON in markdown blocks.
     
-    CRITICAL INSTRUCTIONS - FACTUALITY AND CLEAN-UP (MANDATORY):
+    "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as a continuous, hypnotic stream of consciousness without time.
+    
+    CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
     - ABSOLUTE ATEMPORALITY: NEVER use temporal expressions related to the current day (e.g., "today", "this morning", "Friday", "yesterday", "this Tuesday", "May 1"). Treat events as a continuous apocalypse.
     - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!). Never use them. The narrator never shouts.
     - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers.
@@ -72,9 +74,14 @@ def generate_article(local_texts, intl_texts):
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
     - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, poetic, and cryptic phrase.
     - Write ENTIRELY IN ENGLISH.
-    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing an image. The prompt must be: "Dark cinematic photography, surreal investigative journalism, high contrast black and white, subtle glitch art, mysterious".
+    
+    "soggetto_immagine": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign in Cagliari glowing next to a piece of uranium').
     """
-    response = model.generate_content(prompt)
+    
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.GenerationConfig(response_mime_type="application/json")
+    )
     return response.text
 
 async def main():
@@ -129,16 +136,19 @@ async def main():
     print("Generating article and prompt...")
     raw_response = generate_article(local_pool, international_pool)
     
-    parts = raw_response.split("IMAGE_PROMPT:")
-    article_content = parts[0].strip()
+    try:
+        parsed_response = json.loads(raw_response)
+        article_content = parsed_response.get("testo_articolo", "").strip()
+        base_prompt = parsed_response.get("soggetto_immagine", "surreal geopolitical scene in a local neighborhood").strip()
+    except json.JSONDecodeError:
+        print("Failed to parse JSON response. Falling back.")
+        article_content = raw_response.replace("```json", "").replace("```", "").strip()
+        base_prompt = "surreal geopolitical scene in a local neighborhood"
     
     # Rimuoviamo eventuali tag markdown residui dal testo
     article_content = article_content.replace("```markdown", "").replace("```python", "").replace("```", "").strip()
     
-    if len(parts) > 1:
-        full_prompt = parts[1].strip()
-    else:
-        full_prompt = "Dark cinematic photography, surreal investigative journalism, high contrast black and white, subtle glitch art, mysterious"
+    full_prompt = f"{base_prompt}, Dark cinematic photography, surreal investigative journalism, high contrast black and white, subtle glitch art, mysterious"
     
     encoded_prompt = urllib.parse.quote(full_prompt)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=800&nologo=true&enhance=false"
