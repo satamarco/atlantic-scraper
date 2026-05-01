@@ -43,34 +43,34 @@ def generate_article(sources_data):
     unione_texts = ", ".join(sources_data.get("unione_sarda", []))
     sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
     
-    today_date = datetime.now().strftime('%B %d, %Y')
-    
     prompt = f"""
-    You are a paranoid and visionary genius (a fusion of Hunter S. Thompson and a quantum physicist) acting as a "Cosmic Conspiracy Theorist". You see connections everywhere. Address the reader directly (e.g., "In this swirling vortex of a Tuesday... I've seen it all, friends!").
+    You are a cold, bureaucratic, clinical, and detached analyst. You are a paranoid mind connecting the dots of a global conspiracy using an academic or medical tone. No emotions, only iron-clad logic expressing insane deductions.
+    
     Use the following data extracted from exactly 15 recent articles across three diverse news outlets (The Atlantic, L'Unione Sarda, Sardinia Post):
     
     [The Atlantic]: {atlantic_texts}
     [L'Unione Sarda]: {unione_texts}
     [Sardinia Post]: {sardinia_texts}
     
-    Write a SINGLE fluid and compact text IN ENGLISH, creating a frantic stream of consciousness where it's impossible to tell where a Sardinian local news story ends and an international editorial from The Atlantic begins.
+    Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events in real-time as abstract data within a continuous, atemporal flow.
     
     CRITICAL INSTRUCTIONS - FACTUALITY AND CLEAN-UP (MANDATORY):
+    - ABSOLUTE ATEMPORALITY: NEVER use temporal expressions related to the current day (e.g., "today", "this morning", "Friday", "yesterday", "this Tuesday", "May 1"). Treat events as a continuous diary or dossier. Use opening formulas like "The data reports that...", "Observations indicate...", or start directly describing the fact.
+    - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!). Never use them.
     - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers. They are technical noise, not news.
-    - DATE FILTER: The text must refer to the events of TODAY ({today_date}).
-    - REAL DATA DENSITY: Despite the madness, the text MUST be filled with real names, figures, and data extracted from the 15 articles (Sardinian politicians, towns, euro/dollar figures, US presidents). Use these extremely factual details to build your absurd conspiracy theories.
-    - GOLDEN RULE - EXTREME FUSION: EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together absurdly. For example, connect an electoral fine in Nuoro with quantum gravity, or a mayoral candidate in Quartu with melting glaciers and the recipe for pane carasau.
+    - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the 15 articles (Sardinian politicians, towns, euro/dollar figures, US presidents). Use these extremely factual details to give documentary weight to the delirium.
+    - THE LOGICAL DELIRIUM (EXTREME FUSION): EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local Sardinian news) blended together. Connect provincial politics to maximum geopolitical or physical systems, treating them as symptoms of the exact same cosmic conspiracy.
     
     NARRATIVE AND STYLE RULES:
-    - The narrator is a cosmic conspiracist. Speak directly to the audience.
-    - Create absurd, visceral connections based on shared colors, sounds, or smells between Sardinia and the world. 
+    - The narrator is a cold-blooded analyst. Speak in a clinical, detached, and bureaucratic tone.
+    - Create visceral connections based on shared physical anomalies between Sardinia and the world. 
     
     ANTI-DRIFT RULES:
     - TOTAL BLACKOUT: It is STRICTLY FORBIDDEN to cite Abraham Lincoln, Virginia Woolf, Rachel Carson, the suffragettes, or Vannevar Bush. If an original article cites them, IGNORE those names and focus on other protagonists. 
     - The text must be a single narrative block with well-defined paragraphs, WITHOUT any subtitles or section divisions.
-    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must be a bold, visionary salad of THREE completely disconnected concepts present in the news (e.g., "The Microbes of Suffrage, Malloreddus, and the Geopolitical Veil").
+    - The very first element of the text must be a single Main Title (formatted in Markdown as `# Title`). This title must look like a file header (e.g., "# Dossier: Microchips, Electoral Reform, and Anomalies in Quartu").
     - Write ENTIRELY IN ENGLISH.
-    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing a hallucinated, abstract scene that unites elements from your article.
+    - At the VERY END of your response, on a new line, write exactly "IMAGE_PROMPT: " followed by a single line of text in English describing an image. The prompt must describe an investigative photojournalism scene, where surreal elements are treated as documentary evidence.
     """
     response = model.generate_content(prompt)
     return response.text
@@ -96,7 +96,7 @@ async def main():
     else:
         base_prompt = "surreal geopolitical scene in a local neighborhood"
         
-    full_prompt = f"{base_prompt}, hallucinated, black and white, high contrast, 35mm photograph, grainy"
+    full_prompt = f"{base_prompt}, investigative photojournalism, black and white, high contrast, documentary evidence"
     
     encoded_prompt = urllib.parse.quote(full_prompt)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=800&nologo=true&enhance=false"
