@@ -39,23 +39,23 @@ def save_to_archive(article_text, image_path):
 def generate_article(sources_data):
     model = genai.GenerativeModel('gemini-2.5-flash')
     
-    atlantic_texts = ", ".join(sources_data.get("the_atlantic", []))
-    unione_texts = ", ".join(sources_data.get("unione_sarda", []))
-    sardinia_texts = ", ".join(sources_data.get("sardinia_post", []))
+    atlantic_texts = ", ".join(sources_data.get("the_atlantic", [])[:3])
+    nbc_texts = ", ".join(sources_data.get("nbc_news", [])[:3])
+    vice_texts = ", ".join(sources_data.get("vice", [])[:2])
     
-    nbc_texts = ", ".join(sources_data.get("nbc_news", []))
-    vice_texts = ", ".join(sources_data.get("vice", []))
-    cronache_texts = ", ".join(sources_data.get("cronache_nuoresi", []))
+    unione_texts = ", ".join(sources_data.get("unione_sarda", [])[:3])
+    sardinia_texts = ", ".join(sources_data.get("sardinia_post", [])[:2])
+    cronache_texts = ", ".join(sources_data.get("cronache_nuoresi", [])[:2])
     
     prompt = f"""
     You are a dark, obsessive, and poetic investigator (a visionary mind smoking in the dark, connecting red threads on a chaotic corkboard). 
-    Use the following data extracted from about 18 recent articles across diverse news outlets (The Atlantic, L'Unione Sarda, Sardinia Post, NBC News, Vice, Cronache Nuoresi):
+    Use the following data extracted from exactly 15 recent articles (8 international, 7 local Sardinian) across diverse news outlets:
     
     [The Atlantic]: {atlantic_texts}
-    [L'Unione Sarda]: {unione_texts}
-    [Sardinia Post]: {sardinia_texts}
     [NBC News]: {nbc_texts}
     [Vice]: {vice_texts}
+    [L'Unione Sarda]: {unione_texts}
+    [Sardinia Post]: {sardinia_texts}
     [Cronache Nuoresi]: {cronache_texts}
     
     Write a SINGLE fluid and compact text IN ENGLISH, treating all these news events as a continuous, hypnotic stream of consciousness without time.
@@ -64,8 +64,9 @@ def generate_article(sources_data):
     - ABSOLUTE ATEMPORALITY: NEVER use temporal expressions related to the current day (e.g., "today", "this morning", "Friday", "yesterday", "this Tuesday", "May 1"). Treat events as a continuous apocalypse.
     - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!). Never use them. The narrator never shouts.
     - ANTI-JUNK FILTER: STRICTLY IGNORE and never cite corporate data, VAT numbers (Partite IVA), fiscal codes, share capitals, legal addresses of newspapers, or REA numbers.
-    - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the articles (Sardinian politicians, towns, euro/dollar figures, US presidents). Use these extremely factual details to anchor the poetic delirium to concrete news.
-    - THE LOGICAL DELIRIUM (EXTREME FUSION): EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together organically. Find impossible physical or chromatic connections between facts (e.g., "The noise of American fighter jets in Iran is the same background noise heard during a city council meeting in Nuoro; the color of enriched uranium resembles a broken neon sign of a Cagliari bar").
+    - REAL DATA DENSITY: The text MUST be filled with real names, figures, and data extracted from the 15 articles (Sardinian politicians, towns, euro/dollar figures, US presidents). Use these extremely factual details to anchor the poetic delirium to concrete news.
+    - SARDINIA ANTI-CLICHÉ: Never paste pre-packaged descriptions or old analogies about Sardinian cities (e.g., "like the background hum of a chaotic Nuoro city council meeting... broken neon sign of a Cagliari bar"). If you cite Sardinia, you MUST rely ONLY on the extracted news and not invent or repeat old analogies.
+    - THE LOGICAL DELIRIUM (EXTREME FUSION): EVERY SINGLE paragraph MUST contain elements from AT LEAST 3 DIFFERENT news stories (mixing international and local news) blended together organically. Find impossible physical or chromatic connections between facts, but ground them in the real news data provided.
     
     NARRATIVE AND STYLE RULES (THE OBSESSIVE MONOLOGUE):
     - Tone: Hypnotic, literary, slightly hallucinated. Use rhetorical questions, suspensions (...), and dark, physical metaphors.

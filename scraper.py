@@ -24,32 +24,32 @@ def save_used_links(links):
 SOURCES = {
     "the_atlantic": {
         "base_url": "https://www.theatlantic.com",
-        "sections": ["/world/", "/politics/", "/culture/", "/science/", "/technology/"],
+        "sections": ["/world/", "/politics/", "/science/", "/technology/", "/business/"],
         "link_selector": "a[href*='/archive/']"
     },
     "unione_sarda": {
         "base_url": "https://www.unionesarda.it",
-        "sections": ["/politica/", "/economia/", "/cultura/", "/cronaca/"],
+        "sections": ["/politica/", "/economia/", "/cronaca/"],
         "link_selector": "article a, h2 a, h3 a"
     },
     "sardinia_post": {
         "base_url": "https://www.sardiniapost.it",
-        "sections": ["/politica/", "/economia/", "/culture/", "/cronaca/"],
+        "sections": ["/politica/", "/economia/", "/cronaca/"],
         "link_selector": "h3 a, .entry-title a"
     },
     "nbc_news": {
         "base_url": "https://www.nbcnews.com",
-        "sections": ["/world", "/politics", "/health", "/tech", "/science"],
+        "sections": ["/world", "/politics", "/tech", "/science", "/business"],
         "link_selector": "h2 a, .v-f a"
     },
     "vice": {
         "base_url": "https://www.vice.com/en",
-        "sections": ["/section/news", "/section/tech", "/section/culture"],
+        "sections": ["/section/news", "/section/tech", "/section/world", "/section/politics"],
         "link_selector": "h3 a, .hdg a"
     },
     "cronache_nuoresi": {
         "base_url": "https://www.cronachenuoresi.it",
-        "sections": ["/category/cronaca/", "/category/politica/", "/category/cultura/"],
+        "sections": ["/category/cronaca/", "/category/politica/", "/category/economia/"],
         "link_selector": "h2 a, .entry-title a"
     }
 }
