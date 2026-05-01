@@ -13,12 +13,22 @@ genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 ARCHIVE_FILE = "archivio.json"
 
 def save_to_archive(article_text):
-    # Consolidate to only keep the latest article
-    data = [{
+    # Consolidate to keep cumulative archive, newest first
+    data = []
+    if os.path.exists(ARCHIVE_FILE):
+        try:
+            with open(ARCHIVE_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            data = []
+            
+    new_entry = {
         "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "content": article_text,
         "type": "Visionary Chronicle"
-    }]
+    }
+    
+    data.insert(0, new_entry)
     
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)

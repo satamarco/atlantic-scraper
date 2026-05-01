@@ -107,7 +107,7 @@ st.markdown("<hr>", unsafe_allow_html=True)
 
 article_placeholder = st.empty()
 
-# Render the single latest article
+# Render the entire cumulative archive
 def render_article():
     if os.path.exists(ARCHIVE_FILE):
         try:
@@ -115,11 +115,12 @@ def render_article():
                 archive_data = json.load(f)
                 
             if archive_data and len(archive_data) > 0:
-                entry = archive_data[0] # Single entry format
-                
                 with article_placeholder.container():
-                    st.markdown(f"<div class='archive-date'>{entry.get('timestamp', '')}</div>", unsafe_allow_html=True)
-                    st.markdown(f"<div class='article-container'>{entry['content']}</div>", unsafe_allow_html=True)
+                    for i, entry in enumerate(archive_data):
+                        st.markdown(f"<div class='archive-date'>{entry.get('timestamp', '')}</div>", unsafe_allow_html=True)
+                        st.markdown(f"<div class='article-container'>{entry['content']}</div>", unsafe_allow_html=True)
+                        if i < len(archive_data) - 1:
+                            st.markdown("<hr>", unsafe_allow_html=True)
             else:
                 article_placeholder.info("No article available yet.")
         except json.JSONDecodeError:
