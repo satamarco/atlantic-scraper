@@ -168,12 +168,25 @@ def render_article():
                     for i, entry in enumerate(archive_data):
                         st.markdown(f"<div class='archive-date'>{entry.get('timestamp', '')}</div>", unsafe_allow_html=True)
                         
-                        content = entry.get('content', '')
-                        lines = content.strip().split('\n')
-                        title = lines[0].replace('*', '').strip() if lines else ""
-                        body = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ""
+                        content = entry.get('content', '').strip()
+                        lines = content.split('\n')
                         
-                        st.markdown(f"<div class='article-container' style='font-weight:bold; margin-bottom: 1rem;'>{title}</div>", unsafe_allow_html=True)
+                        # Trova la prima riga non vuota per il titolo
+                        title_idx = 0
+                        while title_idx < len(lines) and not lines[title_idx].strip():
+                            title_idx += 1
+                            
+                        if title_idx < len(lines):
+                            title = lines[title_idx].replace('*', '').strip()
+                            body = '\n'.join(lines[title_idx+1:]).strip()
+                        else:
+                            title = ""
+                            body = ""
+                            
+                        # Forza la rimozione di eventuali asterischi residui per evitare il grassetto a cascata
+                        body = body.replace('**', '')
+                        
+                        st.markdown(f"<div class='article-container' style='font-weight:bold; margin-bottom: 1rem; font-size:1.5rem;'>{title}</div>", unsafe_allow_html=True)
                         
                         if entry.get("image_path") and os.path.exists(entry["image_path"]):
                             st.image(entry["image_path"], use_container_width=True)
