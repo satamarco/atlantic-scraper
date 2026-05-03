@@ -79,7 +79,15 @@ st.markdown("""
         margin: 1.5rem 0 !important;
     }
     
-    /* Countdown style */
+    /* Timer Layout */
+    .timer-container {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 0 !important;
+    }
+    
     .countdown-text {
         font-size: 5rem;
         font-weight: bold;
@@ -88,6 +96,26 @@ st.markdown("""
         letter-spacing: -0.05em;
         line-height: 1;
         margin-bottom: 0 !important;
+    }
+    
+    .current-time-text {
+        font-size: 1.2rem;
+        color: #666666;
+        font-weight: normal;
+        letter-spacing: -0.02em;
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+        .countdown-text {
+            font-size: 3.5rem; /* Riduce la dimensione su smartphone */
+        }
+        .current-time-text {
+            font-size: 1rem;
+        }
+        .main-title {
+            font-size: 2.5rem !important;
+        }
     }
     
     /* Image styling */
@@ -174,5 +202,14 @@ while True:
     minutes, seconds = divmod(remainder, 60)
     
     time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-    countdown_placeholder.markdown(f"<div class='countdown-text'>{time_str}</div>", unsafe_allow_html=True)
+    current_time_str = now.strftime("%H:%M:%S")
+    
+    timer_html = f"""
+    <div class='timer-container'>
+        <div class='countdown-text'>{time_str}</div>
+        <div class='current-time-text'>Rome: {current_time_str}</div>
+    </div>
+    """
+    
+    countdown_placeholder.markdown(timer_html, unsafe_allow_html=True)
     time.sleep(1)
