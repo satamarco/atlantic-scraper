@@ -202,18 +202,10 @@ def render_article():
                         if entry.get("image_path") and os.path.exists(entry["image_path"]):
                             st.image(entry["image_path"], use_container_width=True)
                         
-                        # Layout a colonne per le due lingue
-                        parts = body_raw.split('---')
-                        if len(parts) == 2:
-                            col1, col2 = st.columns(2)
-                            with col1:
-                                st.markdown(f"<div class='article-container'>{parts[0].strip()}</div>", unsafe_allow_html=True)
-                            with col2:
-                                st.markdown(f"<div class='article-container'>{parts[1].strip()}</div>", unsafe_allow_html=True)
-                        else:
-                            # Fallback se non trova il divisore
-                            body = body_raw.replace('---', '<hr class="language-divider">')
-                            st.markdown(f"<div class='article-container'>{body}</div>", unsafe_allow_html=True)
+                        # Converte il divisore testuale markdown nel divisore HTML per separare le lingue
+                        body = body_raw.replace('---', '<hr class="language-divider">')
+                        
+                        st.markdown(f"<div class='article-container'>{body}</div>", unsafe_allow_html=True)
                         
                         st.markdown("<hr class='language-divider'>", unsafe_allow_html=True)
                         
