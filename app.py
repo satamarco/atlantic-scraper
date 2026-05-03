@@ -14,6 +14,9 @@ install_playwright_browsers()
 from dotenv import load_dotenv
 load_dotenv()
 
+if 'display_count' not in st.session_state:
+    st.session_state.display_count = 5
+
 ARCHIVE_FILE = "archivio.json"
 
 st.set_page_config(page_title="Geopolitical Synthesizer", layout="centered")
@@ -174,39 +177,51 @@ def render_article():
                 
             if archive_data and len(archive_data) > 0:
                 with article_placeholder.container():
-                    for i, entry in enumerate(archive_data):
+                    # Only loop up to the current display_count
+                    for i, entry in enumerate(archive_data[:st.session_state.display_count]):
                         st.markdown(f"<div class='archive-date'>{entry.get('timestamp', '')}</div>", unsafe_allow_html=True)
                         
                         content = entry.get('content', '').strip()
                         lines = content.split('\n')
                         
-                        # Trova la prima riga non vuota per il titolo
                         title_idx = 0
                         while title_idx < len(lines) and not lines[title_idx].strip():
                             title_idx += 1
                             
                         if title_idx < len(lines):
                             title = lines[title_idx].replace('*', '').strip()
-                            body = '\n'.join(lines[title_idx+1:]).strip()
+                            body_raw = '\n'.join(lines[title_idx+1:]).strip()
                         else:
                             title = ""
-                            body = ""
+                            body_raw = ""
                             
-                        # Forza la rimozione di eventuali asterischi residui per evitare il grassetto a cascata
-                        body = body.replace('**', '')
-                        
-                        # Converte il divisore testuale markdown nel divisore HTML per separare le lingue
-                        body = body.replace('---', '<hr class="language-divider">')
+                        body_raw = body_raw.replace('**', '')
                         
                         st.markdown(f"<div class='article-container' style='font-weight:bold; margin-bottom: 1rem; font-size:1.5rem;'>{title}</div>", unsafe_allow_html=True)
                         
                         if entry.get("image_path") and os.path.exists(entry["image_path"]):
                             st.image(entry["image_path"], use_container_width=True)
-                            
-                        st.markdown(f"<div class='article-container'>{body}</div>", unsafe_allow_html=True)
                         
-                        if i < len(archive_data) - 1:
-                            st.markdown("<hr>", unsafe_allow_html=True)
+                        # Layout a colonne per le due lingue
+                        parts = body_raw.split('---')
+                        if len(parts) == 2:
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                st.markdown(f"<div class='article-container'>{parts[0].strip()}</div>", unsafe_allow_html=True)
+                            with col2:
+                                st.markdown(f"<div class='article-container'>{parts[1].strip()}</div>", unsafe_allow_html=True)
+                        else:
+                            # Fallback se non trova il divisore
+                            body = body_raw.replace('---', '<hr class="language-divider">')
+                            st.markdown(f"<div class='article-container'>{body}</div>", unsafe_allow_html=True)
+                        
+                        st.markdown("<hr class='language-divider'>", unsafe_allow_html=True)
+                        
+                    # Add Pagination Button
+                    if st.session_state.display_count < len(archive_data):
+                        if st.button("Load Older Entries"):
+                            st.session_state.display_count += 5
+                            st.rerun()
             else:
                 article_placeholder.info("No article available yet.")
         except json.JSONDecodeError:

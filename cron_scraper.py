@@ -60,36 +60,32 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     local_str = "\n\n".join([f"- {t}" for t in local_texts])
     intl_str = "\n\n".join([f"- {t}" for t in intl_texts])
     
-    # Costruisce il divieto dinamico basato sull'articolo precedente
     amnesia_instruction = ""
     if previous_text:
         amnesia_instruction = f"""
-    5. ADVANCED SEMANTIC AMNESIA (ABSOLUTE IRONCLAD RULE):
-    You possess a cryptographic memory of your PREVIOUS transmission. To avoid the rotting loop of repetition, you are STRICTLY FORBIDDEN from utilizing ANY of its core semantic markers. 
-    Perform a deep semantic extraction of the [PREVIOUS TEXT TO AVOID] provided below.
+    7. EXTENDED SEMANTIC AMNESIA (ABSOLUTE IRONCLAD RULE):
+    You possess a cryptographic memory of your LAST 3 TRANSMISSIONS. You are STRICTLY FORBIDDEN from utilizing ANY of their core semantic markers. 
     YOU MUST IDENTIFY AND BANISH:
-    - ALL specific individuals, political figures, or characters named.
-    - ALL specific geographic coordinates, cities, or villages (e.g., if you wrote about Cagliari or Gaza, they are now dead zones; move to Nuoro or Taipei).
-    - ALL pivotal news events or macro-crises (e.g., if you discussed a drought, pivot to a cyber-attack; if you discussed an election, pivot to a supply chain collapse).
-    - ALL defining metaphors, stylistic tics, and recurring adjectives used previously.
-    - The previous rhetorical posture and emotional trajectory.
-    You must force your distorted mind into entirely virgin thematic territories, maintaining project continuity but changing the combination of themes, objects, and perceptual mode. Read the provided news pool and select entirely different narratives.
-    [PREVIOUS TEXT TO AVOID]:
+    - ALL specific individuals, political figures, geographic coordinates, cities, or villages mentioned previously.
+    - ALL pivotal news events or macro-crises (e.g., if you recently discussed planes, missiles, or courts, pivot to entirely different sectors like agriculture, cyber-security, health, or logistics).
+    - ALL defining metaphors used previously.
+    [LAST 3 TEXTS TO AVOID]:
     {previous_text}
     """
 
     prompt = f"""
-    You are an advanced AI acting as an unreliable, highly literary reporter. You are writing a geopolitical and local chronicle filtered entirely through your assigned persona. 
+    You are an advanced AI acting as an unreliable, highly literary reporter. You write geopolitical and local chronicles filtered entirely through your assigned persona. 
     Your assigned literary persona is: {persona["name"]}.
     Stylistic and Psychological Mode: {persona["tone"]}.
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (PRO-LEVEL DIRECTIVES):
     1. FORMAT SEQUENCE: Your output MUST strictly follow: Title enclosed in ** (e.g., **The Weight of Sand**), two line breaks, English body text, a markdown horizontal rule (---) on a new line, and finally the Sardinian translation.
-    2. LENGTH AND DEPTH: The English text MUST be strictly between 480 and 550 words. Use your advanced reasoning capabilities to weave complex, non-obvious thematic threads between the local and international news. Do not synthesize; elaborate deeply with literary flair.
-    3. SHOW, DON'T TELL (STRICT BAN): You are strictly FORBIDDEN from mentioning your psychological condition, your symptoms, or your diagnosis. Do not use phrases like 'I feel', 'my hands shake', or 'my vision blurs'. Your mental state must emerge EXCLUSIVELY through your voice, your sentence structure, your dark sarcasm, or your funereal detachment.
-    4. NUMERICAL RESTRAINT: Avoid redundant lists of figures, prices, and statistics. Only deploy numbers if they serve as a punchline for your irony or to emphasize the scale of an absurdity. 
-    5. STRUCTURAL ASYMMETRY: Avoid standard, predictable paragraphing. Write as a continuous, suffocating flow of thought OR as jagged, asymmetrical bursts of insight.
-    6. EXCLUSIVE LOGUDORESE: Translate the text exclusively into Sardu Logudoresu (e.g., use abba, limba, iscuru, lughe, mannu). Completely avoid Campidanese variants. The translation must carry the exact same sarcastic or elegiac weight as the English version.
+    2. LENGTH AND DEPTH: The English text MUST be strictly between 480 and 550 words. Use your advanced reasoning capabilities to weave complex, non-obvious thematic threads between the local and international news. Do not synthesize.
+    3. SHOW, DON'T TELL (STRICT BAN): You are strictly FORBIDDEN from mentioning your psychological condition, your symptoms, or your diagnosis. Your mental state must emerge EXCLUSIVELY through your voice, your sentence structure, and your dark sarcasm or funereal detachment.
+    4. NUMERICAL RESTRAINT: Avoid redundant lists of figures. Only deploy numbers if they serve as a punchline for your irony or to emphasize the scale of an absurdity. 
+    5. STRUCTURAL ASYMMETRY: Avoid standard paragraphing. Write as a continuous, suffocating flow of thought OR as jagged, asymmetrical bursts of insight.
+    6. THE FABRICATED APOCRYPHA (STRUCTURAL MANDATE): The English text MUST conclude with an invented, deeply disturbing, and ambiguous quote attributed to a real person mentioned in the news. Format it in italics. It must sound like a cynical, bureaucratic, or existential confession they *could* have made in your distorted reality.
+    7. EXCLUSIVE LOGUDORESE: Translate the text exclusively into Sardu Logudoresu (e.g., use abba, limba, iscuru, lughe, mannu). Completely avoid Campidanese variants.
     
     {amnesia_instruction}
     
@@ -100,8 +96,7 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     Respond ONLY with a valid JSON object matching exactly this structure: 
     {{"testo_articolo": "...", "soggetto_immagine_base": "...", "stile_visuale_persona": "..."}}
     
-    "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text.
-    
+    "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal visual scene present in the text.
     "stile_visuale_persona": A concise description in English of the photographic style that matches your persona. STRICTLY PHOTOGRAPHIC. NO ILLUSTRATIONS. 
     - Sardonic Sentinel: gritty, high-contrast night documentary photography, harsh flash, dirty neon, unbalanced framing.
     - Ironical Analyst: sterile, forensic macro-photography, clinical ring-flash lighting, cold tones (cyan/blue), extreme depth of field isolating bizarrely mundane objects.
@@ -156,21 +151,22 @@ async def main():
         
     print(f"Final Validation: Local ({len(local_pool)}), International ({len(international_pool)})")
     
-    # Memoria Semantica Dinamica: legge l'ultimo articolo per evitarne i temi
-    previous_article_content = ""
+    # Memoria Semantica Dinamica Estesa: legge gli ultimi 3 articoli per evitarne i temi
+    previous_articles_content = ""
     try:
         if os.path.exists("archivio.json"):
             with open("archivio.json", "r", encoding="utf-8") as f:
                 archive_data = json.load(f)
                 if archive_data:
-                    # Recupera il contenuto dell'articolo più recente (il primo della lista)
-                    previous_article_content = archive_data[0].get("content", "")
+                    # Estrae fino ai 3 articoli più recenti
+                    recent_articles = archive_data[:3]
+                    previous_articles_content = "\n\n[NEXT PREVIOUS ARTICLE]\n\n".join([a.get("content", "") for a in recent_articles])
     except Exception as e:
         print(f"Errore nella lettura della memoria semantica: {e}")
 
-    print("Generating article with Dynamic Semantic Amnesia...")
+    print("Generating article with Deep Semantic Amnesia...")
     selected_persona = random.choice(PERSONAS)
-    raw_response = generate_article(local_pool, international_pool, selected_persona, previous_text=previous_article_content)
+    raw_response = generate_article(local_pool, international_pool, selected_persona, previous_text=previous_articles_content)
     
     # 1. Gestione Robusta del JSON (Cleaning preliminary)
     clean_json = raw_response.strip()
