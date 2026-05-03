@@ -79,6 +79,16 @@ st.markdown("""
         margin: 1.5rem 0 !important;
     }
     
+    /* Language Divider */
+    .language-divider {
+        border: none !important;
+        border-top: 1px solid #d3d3d3 !important;
+        margin: 2.5rem 0 !important;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
     /* Timer Layout */
     .timer-container {
         display: flex;
@@ -185,6 +195,9 @@ def render_article():
                             
                         # Forza la rimozione di eventuali asterischi residui per evitare il grassetto a cascata
                         body = body.replace('**', '')
+                        
+                        # Converte il divisore testuale markdown nel divisore HTML per separare le lingue
+                        body = body.replace('---', '<hr class="language-divider">')
                         
                         st.markdown(f"<div class='article-container' style='font-weight:bold; margin-bottom: 1rem; font-size:1.5rem;'>{title}</div>", unsafe_allow_html=True)
                         
