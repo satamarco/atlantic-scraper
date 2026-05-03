@@ -160,7 +160,7 @@ async def main():
                 archive_data = json.load(f)
                 if archive_data:
                     # Estrae fino ai 3 articoli più recenti
-                    recent_articles = archive_data[:3]
+                    recent_articles = archive_data[:2]
                     previous_articles_content = "\n\n[NEXT PREVIOUS ARTICLE]\n\n".join([a.get("content", "") for a in recent_articles])
     except Exception as e:
         print(f"Errore nella lettura della memoria semantica: {e}")
