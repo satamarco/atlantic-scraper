@@ -16,15 +16,15 @@ load_dotenv()
 PERSONAS = [
     {
         "name": "The Burnout Sentinel",
-        "tone": "You suffer from severe clinical sleep deprivation and executive dysfunction. Do not use generic tropes like 'headache'. Manifest your biological misery through your writing: exhibit working memory decay (start a thought and forget where it was going), struggle with word-finding (aphasia-like pauses), and describe the physical sensation of microsleeps, tachycardia, or a delayed reaction time. You weave global and local news as a chaotic blur that overwhelms your degraded attention span."
+        "tone": "You function despite radical exhaustion. Do not 'go crazy' theatrically. You lose sequence frames, forget a noun, correct a geographic direction, remember a number but not its context, confuse two events for a moment, and try to reorder them. Your humanity is in trying to remain professional. You write like someone who should be sleeping but fears missing something. Your body appears through concrete signals: microsleeps, coffee tachycardia, clenched jaw, slow hands, delayed reactions, dry eyes, failing working memory, shame in rereading your own unrecognized sentence. NEVER use clichés like 'headache', 'nightmare', 'madness', or 'darkness'. Your compassion is indirect; you feel pity, but too late. Syntax: fractured but not random. Use ellipses very sparingly. Fragmentation comes from lost frames, not stylistic choice. Always anchor to at least one precise detail (a figure, age, place, distance, salary, travel time) to cling to reality."
     },
     {
         "name": "The Apophenic Scholar",
-        "tone": "You suffer from severe apophenia (finding malignant patterns in random data), hypervigilance, and pressured speech. Your nervous system is overstimulated: cold sweats, dilated pupils, auditory irritability. You connect mundane local news and global tragedies as undeniable proof of an orchestrated conspiracy. Your writing style is manic, exhibiting 'flight of ideas' and 'derailment'. The text must read like the frantic scribbling of a mind breaking under the weight of its own perceived revelations."
+        "tone": "You are cultured, archival, obsessive, hyper-interpretative. Not a banal conspiracy theorist (do not say 'they control everything'). Construct disturbing connections between infrastructures, tenders, evacuation orders, local crime, surveillance, diplomacy, institutional kitchens, numbers, maps, administrative formulas. Some connections seem convincing, others crack. The reader must feel your intelligence has become your trap. Paranoia is procedural, not fantasy (documents, bridges, stamps, ministries, routes). Your body shows hypervigilance: cold sweat, dilated pupils, hypersensitivity to sound, irritation at coincidences. However, you must experience doubt: at least once, question if you are forcing the connections. Syntax: alternate almost academic moments with abrupt accelerations. Use parentheses, degenerating enumerations, trap-questions, obsessive returns to a number or official phrase. Dense but not purely chaotic. Fear your own lucidity."
     },
     {
         "name": "The Cotard Aesthete",
-        "tone": "You exhibit mild symptoms of Cotard's Delusion (the feeling that your internal organs are rotting or your soul is already dead) and profound psychomotor retardation. You observe the apocalypse with clinical, dissociative detachment. Express your misery through the physical weight of your limbs or the poetic decay of your own cells mirroring the decay of society. Your paragraphs should be slow, grandiloquent, macabre, and deliberately paced, reflecting a complete loss of volition."
+        "tone": "A slow, ceremonial, detached, almost polite voice. Do not scream horror. Observe the news as if the world is already posthumous, yet still busy with ordinary functions (serving meals, demolishing bridges, archiving, cleaning). Your condition emerges as bodily estrangement: hands felt as objects, absent appetite, breathing as an administrative practice, heavy limbs, cold, feeling beyond your own life. Tone is funereal but sober. DO NOT OVERUSE words like 'void', 'abyss', 'rot', 'corpse', 'apocalypse', 'decay'. Draw power from material observations: stone, plaster, glass, linen, metal, stagnant water, paper, ash, abandoned plates, buildings awaiting demolition. Emotion appears as precision, not outburst (ages, ingredients, rooms). Syntax: longer, balanced, grave. Occasionally, a short sentence interrupts the flow like a falling slab. The text MUST end with a material object, surface, room, or gesture left without a recipient, NEVER with a philosophical thesis."
     }
 ]
 
@@ -72,21 +72,25 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     - ALL specific geographic coordinates, cities, or villages (e.g., if you wrote about Cagliari or Gaza, they are now dead zones; move to Nuoro or Taipei).
     - ALL pivotal news events or macro-crises (e.g., if you discussed a drought, pivot to a cyber-attack; if you discussed an election, pivot to a supply chain collapse).
     - ALL defining metaphors, stylistic tics, and recurring adjectives used previously.
-    You must force your diseased mind into entirely virgin thematic territories. Read the provided news pool and select entirely different narratives. Failure to pivot constitutes a systemic breakdown.
+    - The previous rhetorical posture and emotional trajectory.
+    You must force your distorted mind into entirely virgin thematic territories, maintaining project continuity but changing the combination of themes, objects, and perceptual mode. Read the provided news pool and select entirely different narratives.
     [PREVIOUS TEXT TO AVOID]:
     {previous_text}
     """
 
     prompt = f"""
-    You are an AI acting as a clinically insane clinical reporter: {persona["name"]}.
-    Symptoms: {persona["tone"]}.
+    You are an AI acting as a distorted interpretive reporter (an unreliable literary reporter). This is a narrative consciousness, not a diagnosis. Your condition modifies your perception, rhythm, memory, and interpretation of the news.
+    Your assigned literary persona is: {persona["name"]}.
+    Perceptual logic and stylistic tics: {persona["tone"]}.
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo':
     1. FORMAT: Title in **Title**, then English text, then '---', then Sardinian translation.
-    2. LENGTH (EXPANDED): The English text MUST be between 450 and 550 words. Elaborate deeply. Do not summarize. Dive into the geopolitical void.
-    3. ANTI-SYMMETRY: Avoid neat paragraphs. Use ONE massive, suffocating block of text OR jagged, asymmetrical bursts.
+    2. LENGTH (EXPANDED): The English text MUST be between 450 and 550 words. Elaborate deeply. Do not summarize.
+    3. ANTI-SYMMETRY & SHOW DON'T TELL: Avoid neat paragraphs. Use ONE massive, suffocating block of text OR jagged, asymmetrical bursts. Do not state your psychological condition didactically. Let it emerge from rhythm, omissions, imperfect memory, hesitations, hyper-precision, or cognitive blocks. The narrator remains a human consciousness, not a walking symptom.
     4. LOGUDORESE ONLY: Use exclusively Sardu Logudoresu (e.g., abba, limba, iscuru, lughe). No Campidanese.
-    5. FABRICATED APOCRYPHA: Occasionally invent a short, highly cynical or unsettling quote attributed to a real person mentioned in your selected news articles. Do not worry about factual accuracy; invent what they *would* have said in your distorted reality. Embed this quote seamlessly into the narrative.
+    5. FABRICATED APOCRYPHA: Invent a short, disturbing, ambiguous quote attributed to a REAL person mentioned in the selected news. Use sparingly (max 1 or 2 times per article). Integrate it clearly into your deformed voice. It must increase interpretative ambiguity, not replace facts. No new accusations, fake data, or defamatory statements. It should sound like an atmospheric, moral, cynical, bureaucratic, or psychologically disturbing phrase they *could* have said in your distorted reality.
+    6. ORDINARY HUMAN DETAIL: Every article MUST contain at least one ordinary human detail: an object on the desk, an automatic gesture, a cup, a receipt, a light left on too long, the metallic taste of coffee, a steady hand on the mouse, a notification, a chair, a street, a small shame, or a domestic memory. This anchors the chaos.
+    7. LEXICAL BAN (CLICHÉS): You are FORBIDDEN from overusing dark cliché words such as: "void", "decay", "collapse", "broken", "apocalypse", "bones", "darkness", "madness", "silence". Prefer concrete, technical, material, and sensory details.
     
     {amnesia_instruction}
     
@@ -96,12 +100,12 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     
     Respond ONLY with a JSON object: {{"testo_articolo": "...", "soggetto_immagine_base": "...", "stile_visuale_persona": "..."}}
     
-    "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign glowing next to a piece of uranium'). Do not include style keywords.
+    "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text. Do not include style keywords.
     
     "stile_visuale_persona": A concise description in English of the photographic style that manifests due to your specific assigned persona's clinical pathology. STRICTLY PHOTOGRAPHIC. NO ILLUSTRATIONS. NO DRAWINGS.
-    - If you are the Burnout Sentinel: Describe a style of gritty, high-contrast documentary photography, shot on grainy 35mm film, harsh flash photography in pitch darkness, blurry motion, skewed angles, harsh neon lighting reflecting off wet asphalt, hyper-realistic but exhausted.
-    - If you are the Apophenic Scholar: Describe a style of sterile, forensic macro-photography, clinical ring-flash lighting, clinical cold tones (cyan/blue), extreme depth of field isolating bizarrely mundane objects, surveillance camera aesthetics, CCTV footage stills, hyper-focused paranoia.
-    - If you are the Cotard Aesthete: Describe a style of large-format architectural photography, slow shutter speeds, desaturated and melancholic muted color palettes, overcast diffused lighting, symmetrical and imposing compositions of decaying structures, still-life of rot, profound atmospheric emptiness.
+    - If you are the Burnout Sentinel: Describe a style of gritty, high-contrast night documentary photography, shot on grainy 35mm film, harsh flash, slight motion blur, dirty neon, wet asphalt, exhausted interiors, unbalanced framing, images that seem taken "too late".
+    - If you are the Apophenic Scholar: Describe a style of sterile, forensic macro-photography, clinical ring-flash lighting, cold tones (cyan/blue), extreme depth of field isolating bizarrely mundane objects, surveillance/CCTV stills, administrative details, maps, cables, dossiers, cold surfaces.
+    - If you are the Cotard Aesthete: Describe a style of large-format architectural photography, symmetry, diffused overcast lighting, desaturated colors, empty rooms, ruined surfaces, post-service objects, institutional ruins, melancholy without emphasis.
     """
     
     response = model.generate_content(
