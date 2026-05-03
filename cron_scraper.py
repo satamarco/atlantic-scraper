@@ -70,7 +70,7 @@ def generate_article(local_texts, intl_texts):
     ### Fatti Sardi (Local Pool)
     {local_str}
     
-    You MUST respond ONLY with a valid JSON object containing exactly two keys: "testo_articolo" and "soggetto_immagine". Do not wrap the JSON in markdown blocks.
+    You MUST respond ONLY with a valid JSON object containing exactly three keys: "testo_articolo", "soggetto_immagine_base", and "stile_visuale_persona". Do not wrap the JSON in markdown blocks.
     
     "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH.
     
@@ -98,7 +98,12 @@ def generate_article(local_texts, intl_texts):
     - The Absurdist Juxtaposition (Folklore vs Global Collapse): When merging Sardinian news with international geopolitics, you must intentionally juxtapose massive global crises (war, technology, economic collapse) with hyper-local, seemingly trivial Sardinian events (e.g., an artichoke festival, a local game of 'la murra', a village procession, or food news). Treat these local folkloric events with dark, fatalistic gravity. A village festival is not a happy event; it is a desperate, absurd human ritual to ignore the impending apocalypse. A game of 'murra' in Mandas is as cutthroat and meaningless as a UN summit. Use this stark contrast to highlight the profound absurdity of human existence.
     - Write ENTIRELY IN ENGLISH.
     
-    "soggetto_immagine": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign in Cagliari glowing next to a piece of uranium').
+    "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign glowing next to a piece of uranium'). Do not include style keywords.
+    
+    "stile_visuale_persona": A concise description in English of the medical/neuro-visual style that manifests due to your specific assigned persona's clinical pathology.
+    - If you are the Burnout Sentinel: Describe a visual style of insomnia-induced sketches, German Expressionist film, shaky cam, high-contrast monochrome, random noise, microsleep blurs, and raw, incomplete outlines.
+    - If you are the Apophenic Scholar: Describe a visual style of dense conspiracy maps, occult diagrams, hidden Symbolism, interconnected red threads, hyper-detailed drawings, diagrammatic chaos, and "flight of ideas" collage.
+    - If you are the Cotard Aesthete: Describe a visual style of grand, macabre Decadent art, 19th-century Daguerreotypes of ruins, Symbolist decay, morbid beauty, melancholic apathy, smooth, unrealistic realism, and a complete loss of color/volition.
     """
     
     response = model.generate_content(
@@ -173,29 +178,37 @@ async def main():
     try:
         parsed_response = json.loads(clean_json)
         article_content = parsed_response.get("testo_articolo", "").strip()
-        base_prompt = parsed_response.get("soggetto_immagine", "surreal geopolitical scene in a local neighborhood").strip()
+        
+        # Logica Dinamica dello Stile Visivo
+        raw_soggetto = parsed_response.get("soggetto_immagine_base", "surreal scene in a neighborhood").strip()
+        raw_stile = parsed_response.get("stile_visuale_persona", "dark sketch, high contrast").strip()
+        
+        # Costruzione del Prompt Finale Combinato
+        full_prompt = f"{raw_soggetto}, illustrated in the style of {raw_stile}. Unfiltered stream of consciousness, raw psychological distress, dark atmosphere, mysterious, non-commercial art."
+
     except json.JSONDecodeError:
         print("Failed to parse JSON response. Trying regex fallback.")
-        # 3. Fallback Pulito con regex
-        match_testo = re.search(r'"testo_articolo"\s*:\s*"(.*?)"\s*,\s*"soggetto_immagine"', clean_json, re.DOTALL)
+        # Gestione Fallback con Regex (Aggiornata per la nuova struttura)
+        match_testo = re.search(r'"testo_articolo"\s*:\s*"(.*?)"\s*,\s*"soggetto_immagine_base"', clean_json, re.DOTALL)
         if match_testo:
             article_content = match_testo.group(1).strip()
         else:
-            article_content = "**Dossier: System Failure**\n\nThe stream was corrupted and intercepted before delivery. Awaiting the next cycle."
-            
-        match_soggetto = re.search(r'"soggetto_immagine"\s*:\s*"(.*?)"', clean_json, re.DOTALL)
-        if match_soggetto:
-            base_prompt = match_soggetto.group(1).strip()
-        else:
-            base_prompt = "surreal geopolitical scene in a local neighborhood"
+            article_content = "**SYSTEM ERROR**\n\nINTERCEPTED STREAM: INTERFERENCE DETECTED."
+
+        # Regex fallback per i nuovi campi (semplice, per emergenza)
+        match_soggetto = re.search(r'"soggetto_immagine_base"\s*:\s*"(.*?)"', clean_json, re.DOTALL)
+        base_prompt = match_soggetto.group(1).strip() if match_soggetto else "surreal scene in a neighborhood"
+        
+        match_stile = re.search(r'"stile_visuale_persona"\s*:\s*"(.*?)"', clean_json, re.DOTALL)
+        persona_style = match_stile.group(1).strip() if match_stile else "dark sketch, high contrast"
+
+        full_prompt = f"{base_prompt}, in the style of {persona_style}. Unfiltered stream of consciousness, raw psychological distress, dark atmosphere, mysterious, non-commercial art."
     
     # 2. Pulizia degli Escape Characters
     article_content = article_content.replace("\\n", "\n").replace('\\"', '"').replace("\\'", "'")
     
     # Rimuoviamo eventuali tag markdown residui dal testo
     article_content = article_content.replace("```markdown", "").replace("```python", "").replace("```", "").strip()
-    
-    full_prompt = f"{base_prompt}, Dark cinematic photography, surreal investigative journalism, high contrast black and white, subtle glitch art, mysterious"
     
     encoded_prompt = urllib.parse.quote(full_prompt)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=800&nologo=true&enhance=false"
