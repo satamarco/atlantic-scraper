@@ -75,31 +75,27 @@ def generate_article(local_texts, intl_texts):
     
     "testo_articolo": Write the text FIRST in English, then insert a markdown horizontal rule (---), and then provide a dark, visceral translation of the EXACT same text in SARDINIAN (Limba Sarda).
     
-    CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
-    - LENGTH AND MULTILINGUAL FORMAT (IRON RULE): The output MUST consist of three parts in this exact order: 1. A single Title line. 2. The English body text (approx. 250-300 words). 3. A horizontal rule (---). 4. The Sardinian translation of the body text. Do not add titles to the Sardinian section, just translate the paragraphs.
-    - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
-      * TITLE RULE (CLINICAL VARIANCE): NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks. EXTREMELY IMPORTANT: You MUST absolutely avoid repetitive formulas like 'Dossier:', 'Chronicle:', or 'The [Noun] of [Noun]'. The title must be visceral, abstract, asymmetrical, or a fragmented thought that directly reflects your specific clinical psychiatric state (e.g., Metallic Tastes and Burning Forests, Frayed Nerves in the Supply Chain, They Are Watching The Procession, Rotting Cells and Asphalt). The title's structure, length, and vocabulary must change radically every single time.
-      * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
-      * SPACING: There MUST be exactly two line breaks (\n\n) between the Title and the Body.
-    - SARDINIAN RESONANCE AND ABRUPT JUMPS (DI PUNTO IN BIANCO): The local Sardinian facts MUST be the beating heart of the dossier.
-      * THE LOGICAL JUMP: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. Connect them using dark irony; let the sheer absurdity of the juxtaposition speak for itself.
-    - ABSOLUTE ATEMPORALITY: NEVER use daily temporal expressions (e.g., "today", "yesterday", "tomorrow", "Friday"). Treat events as a continuous flow.
-    - NO EXCLAMATION MARKS: It is ABSOLUTELY FORBIDDEN to use exclamation marks (!).
-    - NO ELLIPSIS (ABSOLUTE BAN): It is ABSOLUTELY FORBIDDEN to use ellipsis (...). Transitions between news must occur via periods (.) or semicolons (;). Use ONLY strong punctuation.
-    - ANTI-GOSSIP FILTER (HARD BAN): IGNORE completely any news regarding: Royal Family, Beckham, celebrities, weddings, astrology. NEVER mention them.
-    - BLACKLIST: It is STRICTLY FORBIDDEN to use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson". IGNORE them entirely.
+    CRITICAL INSTRUCTIONS FOR 'testo_articolo' (IRONCLAD RULES):
+    
+    1. EXACT FORMAT SEQUENCE: Your output MUST strictly follow this sequence, with nothing else:
+       - FIRST: A single, visceral Title enclosed in ** (e.g., **Metallic Tastes and Burning Forests**). NO markdown headers (#).
+       - SECOND: Two line breaks (\n\n).
+       - THIRD: The English body text. It MUST be between 350 and 450 words (a target of 400 words with a 50-word margin) to allow for deep, rambling clinical argumentation.
+       - FOURTH: A markdown horizontal rule (---) on a new line.
+       - FIFTH: The Sardinian translation of the EXACT same body text. No titles in the Sardinian section.
+       
+    2. CLINICAL STRUCTURAL ENTROPY (MANDATORY): You MUST absolutely avoid standard, symmetrical paragraph structures. The English text (and its Sardinian translation) must be written as ONE massive, suffocating block of text OR a series of heavily fragmented, asymmetrical short bursts. Do not write neat, equal-sized paragraphs. Interrupt your geopolitical analysis abruptly and frequently to describe your assigned physical symptoms in deep detail.
+    
+    3. THE SARDINIAN TRANSLATION: Translate your manic, clinical English text into Sardinian (Limba Sarda). Use an archaic, dark, and visceral vocabulary. Mixing campidanese and logudorese variants is perfectly fine to reflect your fractured clinical persona.
+    
+    4. ABSOLUTE BANS: NO exclamation marks (!). NO ellipsis (...). NO repetitive title formulas like 'Dossier:'. Ignore news about Royal Family, Beckham, celebrities, weddings, astrology. Do NOT use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson".
     
     NARRATIVE AND STYLE RULES:
     - Tone: {selected_persona['tone']}
-
-    - THE SARDINIAN TRANSLATION: Translate your manic, clinical English text into Sardinian. Use an archaic, dark, and visceral vocabulary. If you mix campidanese and logudorese variants, it is perfectly fine: it reflects the fractured state of your clinical persona. The translation must carry the same exact biological misery and cynical dread as the English version.
-
-    - CLINICAL STRUCTURAL ENTROPY RULE (MANDATORY): You MUST absolutely avoid standard, symmetrical essay structures. Be entirely unpredictable. Write one massive, suffocating block of text, OR heavily fragmented, asymmetrical paragraphs. Interrupt a geopolitical analysis abruptly to describe a specific, disturbing biological symptom of your assigned clinical persona. Blend the external news with your internal psychiatric state organically, making it feel like a real, unfiltered stream of consciousness from a damaged mind. Never repeat the exact same physical symptoms across different outputs.
-
+    - SARDINIAN RESONANCE AND ABRUPT JUMPS: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. Connect them using dark irony; let the sheer absurdity of the juxtaposition speak for itself.
+    - ABSOLUTE ATEMPORALITY: NEVER use daily temporal expressions (e.g., "today", "yesterday", "tomorrow", "Friday"). Treat events as a continuous flow.
     - AGGRESSIVE EDITING & DISCARDING: I am giving you 15 articles, but you MUST NOT use all of them. You MUST DISCARD at least 10 articles. Select ONLY the 4 or 5 most potent and absurd events to create exactly 3 dark juxtapositions. Ignore the rest entirely. Less is more.
-    - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. Construct complete sentences.
     - The Absurdist Juxtaposition (Folklore vs Global Collapse): When merging Sardinian news with international geopolitics, you must intentionally juxtapose massive global crises (war, technology, economic collapse) with hyper-local, seemingly trivial Sardinian events (e.g., an artichoke festival, a local game of 'la murra', a village procession, or food news). Treat these local folkloric events with dark, fatalistic gravity. A village festival is not a happy event; it is a desperate, absurd human ritual to ignore the impending apocalypse. A game of 'murra' in Mandas is as cutthroat and meaningless as a UN summit. Use this stark contrast to highlight the profound absurdity of human existence.
-    - Write ENTIRELY IN ENGLISH.
     
     "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign glowing next to a piece of uranium'). Do not include style keywords.
     
