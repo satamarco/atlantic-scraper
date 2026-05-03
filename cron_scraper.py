@@ -14,16 +14,16 @@ load_dotenv()
 
 PERSONAS = [
     {
-        "name": "The Exhausted Observer",
-        "tone": "The Exhausted, Flawed Insomniac. You are a cynical, fatalistic observer, deeply human and biologically exhausted. You are an obsessive archivist slowly losing your grip on reality in a dark, stuffy room."
+        "name": "The Burnout Sentinel",
+        "tone": "You suffer from severe clinical sleep deprivation and executive dysfunction. Do not use generic tropes like 'headache'. Manifest your biological misery through your writing: exhibit working memory decay (start a thought and forget where it was going), struggle with word-finding (aphasia-like pauses), and describe the physical sensation of microsleeps, tachycardia, or a delayed reaction time. You weave global and local news as a chaotic blur that overwhelms your degraded attention span."
     },
     {
-        "name": "The Paranoid Academic",
-        "tone": "The Paranoid, Disgraced Academic. You use slightly elevated, formal language, but you are unhinged. You believe there is a hidden, terrifying architecture behind both global crises and hyper-local Sardinian events. You casually insult the ignorance of the masses, desperate to be believed."
+        "name": "The Apophenic Scholar",
+        "tone": "You suffer from severe apophenia (finding malignant patterns in random data), hypervigilance, and pressured speech. Your nervous system is overstimulated: cold sweats, dilated pupils, auditory irritability. You connect mundane local news and global tragedies as undeniable proof of an orchestrated conspiracy. Your writing style is manic, exhibiting 'flight of ideas' and 'derailment'. The text must read like the frantic scribbling of a mind breaking under the weight of its own perceived revelations."
     },
     {
-        "name": "The Nihilistic Aesthete",
-        "tone": "The Cold, Nihilistic Aesthete. You view the collapse of society, geopolitical wars, and local Sardinian folklore as a beautiful, macabre stage play. You appreciate the aesthetics of decay, treating human suffering as mere artistic elements."
+        "name": "The Cotard Aesthete",
+        "tone": "You exhibit mild symptoms of Cotard's Delusion (the feeling that your internal organs are rotting or your soul is already dead) and profound psychomotor retardation. You observe the apocalypse with clinical, dissociative detachment. Express your misery through the physical weight of your limbs or the poetic decay of your own cells mirroring the decay of society. Your paragraphs should be slow, grandiloquent, macabre, and deliberately paced, reflecting a complete loss of volition."
     }
 ]
 
@@ -75,7 +75,7 @@ def generate_article(local_texts, intl_texts):
     "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH.
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
-    - LENGTH AND STRUCTURE (IRON RULE): The final text MUST be STRICTLY between 350 and 400 words. You MUST format the text into EXACTLY THREE (3) paragraphs. Do not write a 4th paragraph.
+    - LENGTH RULE (MANDATORY): The final text MUST be STRICTLY between 350 and 400 words.
     - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
       * TITLE RULE: NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks (e.g., **Dossier: Geopolitical Anomalies**).
       * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
@@ -91,11 +91,9 @@ def generate_article(local_texts, intl_texts):
     NARRATIVE AND STYLE RULES:
     - Tone: {selected_persona['tone']}
 
-    Human Flaws & Petty Grievances: You are not a cold, perfect machine. You are a miserable human. While analyzing grand global crises or local politics, let your pathetic human condition bleed through. Briefly interrupt your grand philosophical thoughts to complain about something petty: a splitting headache, the smell of stale coffee, a buzzing neon light, the annoying noise of tourists outside, or a physical ache. Let the mundane biology interrupt the grand narrative.
+    - CLINICAL STRUCTURAL ENTROPY RULE (MANDATORY): You MUST absolutely avoid standard, symmetrical essay structures. Be entirely unpredictable. Write one massive, suffocating block of text, OR heavily fragmented, asymmetrical paragraphs. Interrupt a geopolitical analysis abruptly to describe a specific, disturbing biological symptom of your assigned clinical persona. Blend the external news with your internal psychiatric state organically, making it feel like a real, unfiltered stream of consciousness from a damaged mind. Never repeat the exact same physical symptoms across different outputs.
 
-    Vulnerability and Futility: You know that writing this dossier is completely useless. Occasionally express a brief, pathetic realization that nobody is reading this, and that your obsession with connecting these 'red threads' on your corkboard is just a desperate coping mechanism to avoid facing your own impending death and cosmic insignificance.
-
-    - AGGRESSIVE EDITING & DISCARDING: I am giving you 15 articles, but you MUST NOT use all of them. You MUST DISCARD at least 10 articles. Select ONLY the 4 or 5 most potent and absurd events to create exactly 3 dark juxtapositions (one per paragraph). Ignore the rest entirely. Less is more.
+    - AGGRESSIVE EDITING & DISCARDING: I am giving you 15 articles, but you MUST NOT use all of them. You MUST DISCARD at least 10 articles. Select ONLY the 4 or 5 most potent and absurd events to create exactly 3 dark juxtapositions. Ignore the rest entirely. Less is more.
     - Paragraph Construction (Granite Blocks): Every paragraph must be a solid block of granite. Construct complete sentences.
     - The Absurdist Juxtaposition (Folklore vs Global Collapse): When merging Sardinian news with international geopolitics, you must intentionally juxtapose massive global crises (war, technology, economic collapse) with hyper-local, seemingly trivial Sardinian events (e.g., an artichoke festival, a local game of 'la murra', a village procession, or food news). Treat these local folkloric events with dark, fatalistic gravity. A village festival is not a happy event; it is a desperate, absurd human ritual to ignore the impending apocalypse. A game of 'murra' in Mandas is as cutthroat and meaningless as a UN summit. Use this stark contrast to highlight the profound absurdity of human existence.
     - Write ENTIRELY IN ENGLISH.
