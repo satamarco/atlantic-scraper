@@ -124,6 +124,7 @@ async def main():
         curr_local.extend(sources_data.get("unione_sarda", []))
         curr_local.extend(sources_data.get("sardinia_post", []))
         curr_local.extend(sources_data.get("cronache_nuoresi", []))
+        curr_local.extend(sources_data.get("indip", []))
         
         curr_intl = []
         curr_intl.extend(sources_data.get("the_atlantic", []))

@@ -51,6 +51,11 @@ SOURCES = {
         "base_url": "https://www.cronachenuoresi.it",
         "sections": ["/category/cultura-e-societa/", "/category/eventi/"],
         "link_selector": "h2 a, .entry-title a"
+    },
+    "indip": {
+        "base_url": "https://indip.it",
+        "sections": ["/inchieste/", "/ambiente/", "/societa/"],
+        "link_selector": "h2 a, h3 a, .entry-title a"
     }
 }
 
