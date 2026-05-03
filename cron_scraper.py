@@ -55,7 +55,7 @@ def save_to_archive(article_text, image_path):
         json.dump(data, f, indent=4, ensure_ascii=False)
 
 def generate_article(local_texts, intl_texts, persona, previous_text=""):
-    model = genai.GenerativeModel('gemini-3.1-pro')
+    model = genai.GenerativeModel('gemini-3.1-pro-preview')
     
     local_str = "\n\n".join([f"- {t}" for t in local_texts])
     intl_str = "\n\n".join([f"- {t}" for t in intl_texts])
