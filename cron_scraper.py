@@ -60,8 +60,14 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     anti_repetition_block = ""
     if previous_text:
         anti_repetition_block = f"""
-    5. SEMANTIC AMNESIA (ANTI-REPETITION RULE):
-    Below is the text of your PREVIOUS article. You MUST NOT reuse the same specific vocabulary, the same core metaphors, or the same central concepts. Evolve your delusion into completely new semantic territories. 
+    5. SEMANTIC AMNESIA (STRICT ANTI-REPETITION RULE):
+    Below is the text of your PREVIOUS article. You are absolutely FORBIDDEN from reusing any of its core elements to ensure complete originality.
+    Specifically, you MUST NOT reuse:
+    - The same specific characters or individuals mentioned.
+    - The same specific cities, villages, or geographic locations (both in Sardinia and globally).
+    - The same exact news events, determining facts, or specific global crises.
+    - The same specific vocabulary, core metaphors, or central thematic concepts.
+    Evolve your delusion into completely new semantic territories, forcing yourself to select entirely different news items from the provided pool.
     [PREVIOUS TEXT START]
     {previous_text}
     [PREVIOUS TEXT END]
