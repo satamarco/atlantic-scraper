@@ -54,15 +54,27 @@ def save_to_archive(article_text, image_path):
     with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-def generate_article(local_texts, intl_texts):
-    selected_persona = random.choice(PERSONAS)
+def generate_article(local_texts, intl_texts, persona, previous_text=""):
     model = genai.GenerativeModel('gemini-2.5-flash')
     
+    anti_repetition_block = ""
+    if previous_text:
+        anti_repetition_block = f"""
+    5. SEMANTIC AMNESIA (ANTI-REPETITION RULE):
+    Below is the text of your PREVIOUS article. You MUST NOT reuse the same specific vocabulary, the same core metaphors, or the same central concepts. Evolve your delusion into completely new semantic territories. 
+    [PREVIOUS TEXT START]
+    {previous_text}
+    [PREVIOUS TEXT END]
+    """
+
     local_str = "\n\n".join([f"- {t}" for t in local_texts])
     intl_str = "\n\n".join([f"- {t}" for t in intl_texts])
     
     prompt = f"""
-    You are a dark, obsessive, and poetic investigator (a visionary mind smoking in the dark, connecting red threads on a chaotic corkboard). 
+    You are an AI acting as a highly disturbed, clinically insane clinical reporter.
+    Your assigned psychiatric persona is: {persona["name"]}.
+    Symptoms to manifest in writing: {persona["tone"]}.
+    
     Use the following data extracted from exactly 15 recent articles (8 local Sardinian, 7 international) across diverse news outlets:
     
     ### Fatti Globali (International Pool)
@@ -80,18 +92,18 @@ def generate_article(local_texts, intl_texts):
     1. EXACT FORMAT SEQUENCE: Your output MUST strictly follow this sequence, with nothing else:
        - FIRST: A single, visceral Title enclosed in ** (e.g., **Metallic Tastes and Burning Forests**). NO markdown headers (#).
        - SECOND: Two line breaks (\n\n).
-       - THIRD: The English body text. It MUST be between 350 and 450 words (a target of 400 words with a 50-word margin) to allow for deep, rambling clinical argumentation.
+       - THIRD: The English body text. It MUST be between 350 and 450 words.
        - FOURTH: A markdown horizontal rule (---) on a new line.
        - FIFTH: The Sardinian translation of the EXACT same body text. No titles in the Sardinian section.
        
-    2. CLINICAL STRUCTURAL ENTROPY (MANDATORY): You MUST absolutely avoid standard, symmetrical paragraph structures. The English text (and its Sardinian translation) must be written as ONE massive, suffocating block of text OR a series of heavily fragmented, asymmetrical short bursts. Do not write neat, equal-sized paragraphs. Interrupt your geopolitical analysis abruptly and frequently to describe your assigned physical symptoms in deep detail.
+    2. CLINICAL STRUCTURAL ENTROPY (MANDATORY): You MUST absolutely avoid standard, symmetrical paragraph structures. The English text (and its Sardinian translation) must be written as ONE massive, suffocating block of text OR a series of heavily fragmented, asymmetrical short bursts. Interrupt your geopolitical analysis abruptly to describe your assigned physical symptoms.
     
-    3. THE SARDINIAN TRANSLATION: Translate your manic, clinical English text into Sardinian (Limba Sarda). Use an archaic, dark, and visceral vocabulary. Mixing campidanese and logudorese variants is perfectly fine to reflect your fractured clinical persona.
+    3. THE SARDINIAN TRANSLATION: Translate your manic, clinical English text into Sardinian. You MUST use EXCLUSIVELY the Logudorese variant (Sardu Logudoresu). Do NOT mix Campidanese. Use an archaic, dark, and visceral vocabulary.
     
     4. ABSOLUTE BANS: NO exclamation marks (!). NO ellipsis (...). NO repetitive title formulas like 'Dossier:'. Ignore news about Royal Family, Beckham, celebrities, weddings, astrology. Do NOT use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson".
+    {anti_repetition_block}
     
     NARRATIVE AND STYLE RULES:
-    - Tone: {selected_persona['tone']}
     - SARDINIAN RESONANCE AND ABRUPT JUMPS: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. Connect them using dark irony; let the sheer absurdity of the juxtaposition speak for itself.
     - ABSOLUTE ATEMPORALITY: NEVER use daily temporal expressions (e.g., "today", "yesterday", "tomorrow", "Friday"). Treat events as a continuous flow.
     - AGGRESSIVE EDITING & DISCARDING: I am giving you 15 articles, but you MUST NOT use all of them. You MUST DISCARD at least 10 articles. Select ONLY the 4 or 5 most potent and absurd events to create exactly 3 dark juxtapositions. Ignore the rest entirely. Less is more.
@@ -153,8 +165,22 @@ async def main():
         
     print(f"Final Validation: Local ({len(local_pool)}), International ({len(international_pool)})")
     
-    print("Generating article and prompt...")
-    raw_response = generate_article(local_pool, international_pool)
+    # Estrazione dell'ultimo articolo per evitare ripetizioni
+    previous_article_text = ""
+    archive_path = "archivio.json"
+    if os.path.exists(archive_path):
+        try:
+            with open(archive_path, "r", encoding="utf-8") as f:
+                archive_data = json.load(f)
+                if archive_data and len(archive_data) > 0:
+                    # Prende l'articolo più recente (assumendo che sia salvato all'indice 0 o estraendo l'ultimo inserito)
+                    previous_article_text = archive_data[0].get("content", "")
+        except Exception as e:
+            print(f"Errore nella lettura dell'archivio per l'anti-repetition: {e}")
+
+    print("Generating article with Gemini...")
+    selected_persona = random.choice(PERSONAS)
+    raw_response = generate_article(local_pool, international_pool, selected_persona, previous_text=previous_article_text)
     
     # 1. Gestione Robusta del JSON (Cleaning preliminary)
     clean_json = raw_response.strip()
