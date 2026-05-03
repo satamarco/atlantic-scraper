@@ -86,6 +86,7 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     5. STRUCTURAL ASYMMETRY: Avoid standard paragraphing. Write as a continuous, suffocating flow of thought OR as jagged, asymmetrical bursts of insight.
     6. THE FABRICATED APOCRYPHA (STRUCTURAL MANDATE): The English text MUST conclude with an invented, deeply disturbing, and ambiguous quote attributed to a real person mentioned in the news. Format it in italics. It must sound like a cynical, bureaucratic, or existential confession they *could* have made in your distorted reality.
     7. EXCLUSIVE LOGUDORESE: Translate the text exclusively into Sardu Logudoresu (e.g., use abba, limba, iscuru, lughe, mannu). Completely avoid Campidanese variants.
+    8. THE SARDINIAN ANCHOR (GEOGRAPHICAL MANDATE): You must explicitly ground the local news in the physical reality of Sardinia. Do not use generic terms like 'the island', 'the local administration', or 'the region'. You MUST name the specific Sardinian towns, streets, landscapes, or infrastructure involved in the news (e.g., Cagliari, SS131 highway, Sulcis, a specific port, or a remote village). Make the Sardinian setting visceral, concrete, and geographically unmistakable before connecting it to the international void.
     
     {amnesia_instruction}
     
