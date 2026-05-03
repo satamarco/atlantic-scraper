@@ -207,7 +207,7 @@ while True:
     timer_html = f"""
     <div class='timer-container'>
         <div class='countdown-text'>{time_str}</div>
-        <div class='current-time-text'>Rome: {current_time_str}</div>
+        <div class='current-time-text'>{current_time_str}</div>
     </div>
     """
     
