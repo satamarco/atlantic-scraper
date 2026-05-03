@@ -8,6 +8,7 @@ import requests
 import random
 import re
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -42,7 +43,7 @@ def save_to_archive(article_text, image_path):
             data = []
             
     new_entry = {
-        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "timestamp": datetime.now(ZoneInfo("Europe/Rome")).strftime("%Y-%m-%d %H:%M:%S (IT)"),
         "content": article_text,
         "type": "Visionary Chronicle",
         "image_path": image_path
@@ -216,7 +217,7 @@ async def main():
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=800&nologo=true&enhance=false"
     
     os.makedirs("assets", exist_ok=True)
-    date_str = datetime.now().strftime("%Y%m%d%H%M%S")
+    date_str = datetime.now(ZoneInfo("Europe/Rome")).strftime("%Y%m%d%H%M%S")
     image_filename = f"image_{date_str}.jpg"
     image_path = os.path.join("assets", image_filename)
     

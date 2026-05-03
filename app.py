@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 import time
 
 @st.cache_resource
@@ -164,12 +165,9 @@ render_article()
 
 # Update countdown every second
 while True:
-    now = datetime.now(timezone.utc)
-    # Calculate next milestone (00:00 or 12:00 UTC)
-    if now.hour < 12:
-        next_time = now.replace(hour=12, minute=0, second=0, microsecond=0)
-    else:
-        next_time = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    now = datetime.now(ZoneInfo("Europe/Rome"))
+    # Calculate next milestone (midnight IT)
+    next_time = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
         
     diff = next_time - now
     hours, remainder = divmod(diff.seconds, 3600)
