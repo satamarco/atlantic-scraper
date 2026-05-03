@@ -57,63 +57,36 @@ def save_to_archive(article_text, image_path):
 def generate_article(local_texts, intl_texts, persona, previous_text=""):
     model = genai.GenerativeModel('gemini-2.5-flash')
     
-    anti_repetition_block = ""
-    if previous_text:
-        anti_repetition_block = f"""
-    5. SEMANTIC AMNESIA (STRICT ANTI-REPETITION RULE):
-    Below is the text of your PREVIOUS article. You are absolutely FORBIDDEN from reusing any of its core elements to ensure complete originality.
-    Specifically, you MUST NOT reuse:
-    - The same specific characters or individuals mentioned.
-    - The same specific cities, villages, or geographic locations (both in Sardinia and globally).
-    - The same exact news events, determining facts, or specific global crises.
-    - The same specific vocabulary, core metaphors, or central thematic concepts.
-    Evolve your delusion into completely new semantic territories, forcing yourself to select entirely different news items from the provided pool.
-    [PREVIOUS TEXT START]
-    {previous_text}
-    [PREVIOUS TEXT END]
-    """
-
     local_str = "\n\n".join([f"- {t}" for t in local_texts])
     intl_str = "\n\n".join([f"- {t}" for t in intl_texts])
     
+    # Costruisce il divieto dinamico basato sull'articolo precedente
+    amnesia_instruction = ""
+    if previous_text:
+        amnesia_instruction = f"""
+    5. DYNAMIC SEMANTIC AMNESIA (MANDATORY):
+    Analyze the following text from your PREVIOUS article. You are STRONGLY FORBIDDEN from reusing its central themes, its specific metaphors, and its primary nouns. If the previous text talked about 'bridges', talk about 'tunnels' or 'satellites'. If it talked about 'chefs', talk about 'miners' or 'hackers'.
+    [PREVIOUS TEXT TO AVOID]:
+    {previous_text}
+    """
+
     prompt = f"""
-    You are an AI acting as a highly disturbed, clinically insane clinical reporter.
-    Your assigned psychiatric persona is: {persona["name"]}.
-    Symptoms to manifest in writing: {persona["tone"]}.
+    You are an AI acting as a clinically insane clinical reporter: {persona["name"]}.
+    Symptoms: {persona["tone"]}.
     
-    Use the following data extracted from exactly 15 recent articles (8 local Sardinian, 7 international) across diverse news outlets:
+    CRITICAL INSTRUCTIONS FOR 'testo_articolo':
+    1. FORMAT: Title in **Title**, then English text, then '---', then Sardinian translation.
+    2. LENGTH (EXPANDED): The English text MUST be between 450 and 550 words. Elaborate deeply. Do not summarize. Dive into the geopolitical void.
+    3. ANTI-SYMMETRY: Avoid neat paragraphs. Use ONE massive, suffocating block of text OR jagged, asymmetrical bursts.
+    4. LOGUDORESE ONLY: Use exclusively Sardu Logudoresu (e.g., abba, limba, iscuru, lughe). No Campidanese.
     
-    ### Fatti Globali (International Pool)
-    {intl_str}
+    {amnesia_instruction}
     
-    ### Fatti Sardi (Local Pool)
-    {local_str}
+    [NEWS CONTEXT]:
+    LOCAL: {local_str}
+    INTERNATIONAL: {intl_str}
     
-    You MUST respond ONLY with a valid JSON object containing exactly three keys: "testo_articolo", "soggetto_immagine_base", and "stile_visuale_persona". Do not wrap the JSON in markdown blocks.
-    
-    "testo_articolo": Write the text FIRST in English, then insert a markdown horizontal rule (---), and then provide a dark, visceral translation of the EXACT same text in SARDINIAN (Limba Sarda).
-    
-    CRITICAL INSTRUCTIONS FOR 'testo_articolo' (IRONCLAD RULES):
-    
-    1. EXACT FORMAT SEQUENCE: Your output MUST strictly follow this sequence, with nothing else:
-       - FIRST: A single, visceral Title enclosed in ** (e.g., **Metallic Tastes and Burning Forests**). NO markdown headers (#).
-       - SECOND: Two line breaks (\n\n).
-       - THIRD: The English body text. It MUST be between 350 and 450 words.
-       - FOURTH: A markdown horizontal rule (---) on a new line.
-       - FIFTH: The Sardinian translation of the EXACT same body text. No titles in the Sardinian section.
-       
-    2. CLINICAL STRUCTURAL ENTROPY (MANDATORY): You MUST absolutely avoid standard, symmetrical paragraph structures. The English text (and its Sardinian translation) must be written as ONE massive, suffocating block of text OR a series of heavily fragmented, asymmetrical short bursts. Interrupt your geopolitical analysis abruptly to describe your assigned physical symptoms.
-    
-    3. THE SARDINIAN TRANSLATION: Translate your manic, clinical English text into Sardinian. You MUST use EXCLUSIVELY the Logudorese variant (Sardu Logudoresu). Do NOT mix Campidanese. Use an archaic, dark, and visceral vocabulary.
-    
-    4. ABSOLUTE BANS: NO exclamation marks (!). NO ellipsis (...). NO repetitive title formulas like 'Dossier:'. Ignore news about Royal Family, Beckham, celebrities, weddings, astrology. Do NOT use the words: "suffrage", "suffragettes", "Lincoln", "Virginia Woolf", "Rachel Carson".
-    {anti_repetition_block}
-    
-    NARRATIVE AND STYLE RULES:
-    - SARDINIAN RESONANCE AND ABRUPT JUMPS: Mix local Sardinian news with global geopolitics abruptly (di punto in bianco) within the exact same paragraph or sentence. NO PREAMBLES or soft transitions. Connect them using dark irony; let the sheer absurdity of the juxtaposition speak for itself.
-    - ABSOLUTE ATEMPORALITY: NEVER use daily temporal expressions (e.g., "today", "yesterday", "tomorrow", "Friday"). Treat events as a continuous flow.
-    - AGGRESSIVE EDITING & DISCARDING: I am giving you 15 articles, but you MUST NOT use all of them. You MUST DISCARD at least 10 articles. Select ONLY the 4 or 5 most potent and absurd events to create exactly 3 dark juxtapositions. Ignore the rest entirely. Less is more.
-    - The Absurdist Juxtaposition (Folklore vs Global Collapse): When merging Sardinian news with international geopolitics, you must intentionally juxtapose massive global crises (war, technology, economic collapse) with hyper-local, seemingly trivial Sardinian events (e.g., an artichoke festival, a local game of 'la murra', a village procession, or food news). Treat these local folkloric events with dark, fatalistic gravity. A village festival is not a happy event; it is a desperate, absurd human ritual to ignore the impending apocalypse. A game of 'murra' in Mandas is as cutthroat and meaningless as a UN summit. Use this stark contrast to highlight the profound absurdity of human existence.
+    Respond ONLY with a JSON object: {{"testo_articolo": "...", "soggetto_immagine_base": "...", "stile_visuale_persona": "..."}}
     
     "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign glowing next to a piece of uranium'). Do not include style keywords.
     
@@ -171,22 +144,21 @@ async def main():
         
     print(f"Final Validation: Local ({len(local_pool)}), International ({len(international_pool)})")
     
-    # Estrazione dell'ultimo articolo per evitare ripetizioni
-    previous_article_text = ""
-    archive_path = "archivio.json"
-    if os.path.exists(archive_path):
-        try:
-            with open(archive_path, "r", encoding="utf-8") as f:
+    # Memoria Semantica Dinamica: legge l'ultimo articolo per evitarne i temi
+    previous_article_content = ""
+    try:
+        if os.path.exists("archivio.json"):
+            with open("archivio.json", "r", encoding="utf-8") as f:
                 archive_data = json.load(f)
-                if archive_data and len(archive_data) > 0:
-                    # Prende l'articolo più recente (assumendo che sia salvato all'indice 0 o estraendo l'ultimo inserito)
-                    previous_article_text = archive_data[0].get("content", "")
-        except Exception as e:
-            print(f"Errore nella lettura dell'archivio per l'anti-repetition: {e}")
+                if archive_data:
+                    # Recupera il contenuto dell'articolo più recente (il primo della lista)
+                    previous_article_content = archive_data[0].get("content", "")
+    except Exception as e:
+        print(f"Errore nella lettura della memoria semantica: {e}")
 
-    print("Generating article with Gemini...")
+    print("Generating article with Dynamic Semantic Amnesia...")
     selected_persona = random.choice(PERSONAS)
-    raw_response = generate_article(local_pool, international_pool, selected_persona, previous_text=previous_article_text)
+    raw_response = generate_article(local_pool, international_pool, selected_persona, previous_text=previous_article_content)
     
     # 1. Gestione Robusta del JSON (Cleaning preliminary)
     clean_json = raw_response.strip()
