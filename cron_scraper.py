@@ -72,10 +72,10 @@ def generate_article(local_texts, intl_texts):
     
     You MUST respond ONLY with a valid JSON object containing exactly three keys: "testo_articolo", "soggetto_immagine_base", and "stile_visuale_persona". Do not wrap the JSON in markdown blocks.
     
-    "testo_articolo": Write a SINGLE fluid and compact text IN ENGLISH.
+    "testo_articolo": Write the text FIRST in English, then insert a markdown horizontal rule (---), and then provide a dark, visceral translation of the EXACT same text in SARDINIAN (Limba Sarda).
     
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
-    - LENGTH RULE (MANDATORY): The final text MUST be STRICTLY between 350 and 400 words.
+    - LENGTH AND MULTILINGUAL FORMAT (IRON RULE): The output MUST consist of three parts in this exact order: 1. A single Title line. 2. The English body text (approx. 250-300 words). 3. A horizontal rule (---). 4. The Sardinian translation of the body text. Do not add titles to the Sardinian section, just translate the paragraphs.
     - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
       * TITLE RULE (CLINICAL VARIANCE): NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks. EXTREMELY IMPORTANT: You MUST absolutely avoid repetitive formulas like 'Dossier:', 'Chronicle:', or 'The [Noun] of [Noun]'. The title must be visceral, abstract, asymmetrical, or a fragmented thought that directly reflects your specific clinical psychiatric state (e.g., Metallic Tastes and Burning Forests, Frayed Nerves in the Supply Chain, They Are Watching The Procession, Rotting Cells and Asphalt). The title's structure, length, and vocabulary must change radically every single time.
       * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
@@ -90,6 +90,8 @@ def generate_article(local_texts, intl_texts):
     
     NARRATIVE AND STYLE RULES:
     - Tone: {selected_persona['tone']}
+
+    - THE SARDINIAN TRANSLATION: Translate your manic, clinical English text into Sardinian. Use an archaic, dark, and visceral vocabulary. If you mix campidanese and logudorese variants, it is perfectly fine: it reflects the fractured state of your clinical persona. The translation must carry the same exact biological misery and cynical dread as the English version.
 
     - CLINICAL STRUCTURAL ENTROPY RULE (MANDATORY): You MUST absolutely avoid standard, symmetrical essay structures. Be entirely unpredictable. Write one massive, suffocating block of text, OR heavily fragmented, asymmetrical paragraphs. Interrupt a geopolitical analysis abruptly to describe a specific, disturbing biological symptom of your assigned clinical persona. Blend the external news with your internal psychiatric state organically, making it feel like a real, unfiltered stream of consciousness from a damaged mind. Never repeat the exact same physical symptoms across different outputs.
 
