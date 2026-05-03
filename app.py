@@ -130,7 +130,6 @@ st.markdown("""
     
     /* Image styling */
     [data-testid="stImage"] img {
-        filter: grayscale(100%) !important;
         border-radius: 0 !important;
         margin-bottom: 2rem !important;
     }
