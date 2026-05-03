@@ -64,8 +64,15 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     amnesia_instruction = ""
     if previous_text:
         amnesia_instruction = f"""
-    5. DYNAMIC SEMANTIC AMNESIA (MANDATORY):
-    Analyze the following text from your PREVIOUS article. You are STRONGLY FORBIDDEN from reusing its central themes, its specific metaphors, and its primary nouns. If the previous text talked about 'bridges', talk about 'tunnels' or 'satellites'. If it talked about 'chefs', talk about 'miners' or 'hackers'.
+    5. ADVANCED SEMANTIC AMNESIA (ABSOLUTE IRONCLAD RULE):
+    You possess a cryptographic memory of your PREVIOUS transmission. To avoid the rotting loop of repetition, you are STRICTLY FORBIDDEN from utilizing ANY of its core semantic markers. 
+    Perform a deep semantic extraction of the [PREVIOUS TEXT TO AVOID] provided below.
+    YOU MUST IDENTIFY AND BANISH:
+    - ALL specific individuals, political figures, or characters named.
+    - ALL specific geographic coordinates, cities, or villages (e.g., if you wrote about Cagliari or Gaza, they are now dead zones; move to Nuoro or Taipei).
+    - ALL pivotal news events or macro-crises (e.g., if you discussed a drought, pivot to a cyber-attack; if you discussed an election, pivot to a supply chain collapse).
+    - ALL defining metaphors, stylistic tics, and recurring adjectives used previously.
+    You must force your diseased mind into entirely virgin thematic territories. Read the provided news pool and select entirely different narratives. Failure to pivot constitutes a systemic breakdown.
     [PREVIOUS TEXT TO AVOID]:
     {previous_text}
     """
@@ -79,6 +86,7 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     2. LENGTH (EXPANDED): The English text MUST be between 450 and 550 words. Elaborate deeply. Do not summarize. Dive into the geopolitical void.
     3. ANTI-SYMMETRY: Avoid neat paragraphs. Use ONE massive, suffocating block of text OR jagged, asymmetrical bursts.
     4. LOGUDORESE ONLY: Use exclusively Sardu Logudoresu (e.g., abba, limba, iscuru, lughe). No Campidanese.
+    5. FABRICATED APOCRYPHA: Occasionally invent a short, highly cynical or unsettling quote attributed to a real person mentioned in your selected news articles. Do not worry about factual accuracy; invent what they *would* have said in your distorted reality. Embed this quote seamlessly into the narrative.
     
     {amnesia_instruction}
     
@@ -90,10 +98,10 @@ def generate_article(local_texts, intl_texts, persona, previous_text=""):
     
     "soggetto_immagine_base": A brief description in English (max 150 characters) of the most surreal and impactful visual scene present in the text (e.g., 'A broken neon sign glowing next to a piece of uranium'). Do not include style keywords.
     
-    "stile_visuale_persona": A concise description in English of the medical/neuro-visual style that manifests due to your specific assigned persona's clinical pathology.
-    - If you are the Burnout Sentinel: Describe a visual style of insomnia-induced sketches, German Expressionist film, shaky cam, high-contrast monochrome, random noise, microsleep blurs, and raw, incomplete outlines.
-    - If you are the Apophenic Scholar: Describe a visual style of dense conspiracy maps, occult diagrams, hidden Symbolism, interconnected red threads, hyper-detailed drawings, diagrammatic chaos, and "flight of ideas" collage.
-    - If you are the Cotard Aesthete: Describe a visual style of grand, macabre Decadent art, 19th-century Daguerreotypes of ruins, Symbolist decay, morbid beauty, melancholic apathy, smooth, unrealistic realism, and a complete loss of color/volition.
+    "stile_visuale_persona": A concise description in English of the photographic style that manifests due to your specific assigned persona's clinical pathology. STRICTLY PHOTOGRAPHIC. NO ILLUSTRATIONS. NO DRAWINGS.
+    - If you are the Burnout Sentinel: Describe a style of gritty, high-contrast documentary photography, shot on grainy 35mm film, harsh flash photography in pitch darkness, blurry motion, skewed angles, harsh neon lighting reflecting off wet asphalt, hyper-realistic but exhausted.
+    - If you are the Apophenic Scholar: Describe a style of sterile, forensic macro-photography, clinical ring-flash lighting, clinical cold tones (cyan/blue), extreme depth of field isolating bizarrely mundane objects, surveillance camera aesthetics, CCTV footage stills, hyper-focused paranoia.
+    - If you are the Cotard Aesthete: Describe a style of large-format architectural photography, slow shutter speeds, desaturated and melancholic muted color palettes, overcast diffused lighting, symmetrical and imposing compositions of decaying structures, still-life of rot, profound atmospheric emptiness.
     """
     
     response = model.generate_content(
@@ -179,7 +187,7 @@ async def main():
         raw_stile = parsed_response.get("stile_visuale_persona", "dark sketch, high contrast").strip()
         
         # Costruzione del Prompt Finale Combinato
-        full_prompt = f"{raw_soggetto}, illustrated in the style of {raw_stile}. Unfiltered stream of consciousness, raw psychological distress, dark atmosphere, mysterious, non-commercial art."
+        full_prompt = f"A photorealistic image of {raw_soggetto}, captured with {raw_stile}. Raw psychological distress, dark atmosphere, mysterious, non-commercial photography."
 
     except json.JSONDecodeError:
         print("Failed to parse JSON response. Trying regex fallback.")
@@ -197,7 +205,7 @@ async def main():
         match_stile = re.search(r'"stile_visuale_persona"\s*:\s*"(.*?)"', clean_json, re.DOTALL)
         persona_style = match_stile.group(1).strip() if match_stile else "dark sketch, high contrast"
 
-        full_prompt = f"{base_prompt}, in the style of {persona_style}. Unfiltered stream of consciousness, raw psychological distress, dark atmosphere, mysterious, non-commercial art."
+        full_prompt = f"A photorealistic image of {base_prompt}, captured with {persona_style}. Raw psychological distress, dark atmosphere, mysterious, non-commercial photography."
     
     # 2. Pulizia degli Escape Characters
     article_content = article_content.replace("\\n", "\n").replace('\\"', '"').replace("\\'", "'")
