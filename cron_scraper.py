@@ -77,7 +77,7 @@ def generate_article(local_texts, intl_texts):
     CRITICAL INSTRUCTIONS FOR 'testo_articolo' (MANDATORY):
     - LENGTH RULE (MANDATORY): The final text MUST be STRICTLY between 350 and 400 words.
     - RIGID TWO-BLOCK FORMAT: The output must consist ONLY of two elements: a single Title line, followed by the Body text.
-      * TITLE RULE: NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks (e.g., **Dossier: Geopolitical Anomalies**).
+      * TITLE RULE (CLINICAL VARIANCE): NO MARKDOWN HEADERS. NEVER use #, ##, or ###. The title must be enclosed in double asterisks. EXTREMELY IMPORTANT: You MUST absolutely avoid repetitive formulas like 'Dossier:', 'Chronicle:', or 'The [Noun] of [Noun]'. The title must be visceral, abstract, asymmetrical, or a fragmented thought that directly reflects your specific clinical psychiatric state (e.g., Metallic Tastes and Burning Forests, Frayed Nerves in the Supply Chain, They Are Watching The Procession, Rotting Cells and Asphalt). The title's structure, length, and vocabulary must change radically every single time.
       * BODY RULE: The body must be plain text. NO bold, NO italics, NO bullet points.
       * SPACING: There MUST be exactly two line breaks (\n\n) between the Title and the Body.
     - SARDINIAN RESONANCE AND ABRUPT JUMPS (DI PUNTO IN BIANCO): The local Sardinian facts MUST be the beating heart of the dossier.
