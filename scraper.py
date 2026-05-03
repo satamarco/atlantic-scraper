@@ -21,12 +21,7 @@ def save_used_links(links):
     with open(USED_LINKS_FILE, "w", encoding="utf-8") as f:
         json.dump(list(links), f, indent=4)
 
-SOURCES = {
-    "the_atlantic": {
-        "base_url": "https://www.theatlantic.com",
-        "sections": ["/world/", "/politics/", "/science/", "/technology/", "/business/"],
-        "link_selector": "a[href*='/archive/']"
-    },
+LOCAL_SOURCES = {
     "unione_sarda": {
         "base_url": "https://www.unionesarda.it",
         "sections": ["/news-sardegna/", "/tempo-libero/", "/cultura/"],
@@ -37,16 +32,6 @@ SOURCES = {
         "sections": ["/category/cucina-e-cibo/", "/category/culture/", "/category/eventi/"],
         "link_selector": "h3 a, .entry-title a"
     },
-    "nbc_news": {
-        "base_url": "https://www.nbcnews.com",
-        "sections": ["/world", "/politics", "/tech", "/science", "/business"],
-        "link_selector": "h2 a, .v-f a"
-    },
-    "vice": {
-        "base_url": "https://www.vice.com/en",
-        "sections": ["/section/news", "/section/tech", "/section/world", "/section/politics"],
-        "link_selector": "h3 a, .hdg a"
-    },
     "cronache_nuoresi": {
         "base_url": "https://www.cronachenuoresi.it",
         "sections": ["/category/cultura-e-societa/", "/category/eventi/"],
@@ -56,6 +41,59 @@ SOURCES = {
         "base_url": "https://indip.it",
         "sections": ["/inchieste/", "/ambiente/", "/societa/"],
         "link_selector": "h2 a, h3 a, .entry-title a"
+    },
+    "casteddu_online": {
+        "base_url": "https://www.castedduonline.it",
+        "sections": ["/sardegna/", "/cagliari/", "/cronaca/"],
+        "link_selector": "h3 a, .entry-title a"
+    },
+    "vistanet": {
+        "base_url": "https://www.vistanet.it",
+        "sections": ["/cagliari/cronaca/", "/cagliari/attualita/"],
+        "link_selector": "h3 a, .entry-title a"
+    },
+    "sardegna_live": {
+        "base_url": "https://www.sardegnalive.net",
+        "sections": ["/news/in-sardegna", "/news/cronaca"],
+        "link_selector": "h2 a, h3 a, .title a"
+    }
+}
+
+INTL_SOURCES = {
+    "the_atlantic": {
+        "base_url": "https://www.theatlantic.com",
+        "sections": ["/world/", "/politics/", "/science/"],
+        "link_selector": "a[href*='/archive/']"
+    },
+    "nbc_news": {
+        "base_url": "https://www.nbcnews.com",
+        "sections": ["/world", "/politics", "/tech"],
+        "link_selector": "h2 a, .v-f a"
+    },
+    "vice": {
+        "base_url": "https://www.vice.com/en",
+        "sections": ["/section/news", "/section/world", "/section/politics"],
+        "link_selector": "h3 a, .hdg a"
+    },
+    "al_jazeera": {
+        "base_url": "https://www.aljazeera.com",
+        "sections": ["/news/", "/economy/"],
+        "link_selector": "h3 a, .u-clickable-card__link"
+    },
+    "the_guardian": {
+        "base_url": "https://www.theguardian.com",
+        "sections": ["/world", "/environment", "/science"],
+        "link_selector": "a[data-link-name='article']"
+    },
+    "france24": {
+        "base_url": "https://www.france24.com/en",
+        "sections": ["/europe/", "/middle-east/", "/asia-pacific/"],
+        "link_selector": "h2 a, h3 a, .m-item-title-link"
+    },
+    "japan_times": {
+        "base_url": "https://www.japantimes.co.jp",
+        "sections": ["/news/asia-pacific/", "/news/world/"],
+        "link_selector": ".article-title a, p a"
     }
 }
 
@@ -102,41 +140,38 @@ async def scrape_all_sources(timeout=30000):
     used_links = load_used_links()
     new_used_links = set(used_links)
     
-    sources_data = {
-        "the_atlantic": [],
-        "unione_sarda": [],
-        "sardinia_post": []
-    }
+    # Campiona casualmente 4 fonti sarde e 4 fonti internazionali per ogni esecuzione
+    selected_local = random.sample(list(LOCAL_SOURCES.items()), 4)
+    selected_intl = random.sample(list(INTL_SOURCES.items()), 4)
+    
+    combined_sources = [("local", name, data) for name, data in selected_local] + \
+                       [("international", name, data) for name, data in selected_intl]
+    
+    results = {"local": [], "international": []}
     
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        # Add a realistic user agent to avoid blocking
         context = await browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
         page = await context.new_page()
         
-        for source_name, source_info in SOURCES.items():
-            print(f"\n=== Exploring {source_name.upper()} ===")
+        for category, source_name, source_info in combined_sources:
+            print(f"\n=== Exploring {source_name.upper()} ({category}) ===")
             valid_articles = []
-            
             sections = list(source_info["sections"])
-            random.shuffle(sections) # Randomize to get diverse themes
-            
+            random.shuffle(sections)
             collected_links = set()
             
-            # Step 1: Collect potential links from various sections
             for section in sections:
-                if len(collected_links) >= 15: # Gather enough candidate links
+                if len(collected_links) >= 15:
                     break
-                    
                 section_url = source_info["base_url"] + section
                 print(f"-> Scanning section: {section_url}")
                 try:
                     await page.goto(section_url, timeout=timeout)
                     await page.wait_for_timeout(2000)
                     links = await page.query_selector_all(source_info["link_selector"])
-                    
                     for link in links:
                         href = await link.get_attribute("href")
                         if href:
@@ -147,14 +182,12 @@ async def scrape_all_sources(timeout=30000):
                 except Exception as e:
                     print(f"   [!] Failed scanning section {section_url}")
 
-            # Step 2: Fetch article details until we have exactly 3 (roughly 18 total)
             collected_links = list(collected_links)
             random.shuffle(collected_links)
             
             for url in collected_links:
                 if len(valid_articles) >= 3:
                     break
-                    
                 print(f"   - Testing article: {url}")
                 text = await fetch_article_data(page, url, timeout=timeout)
                 if text:
@@ -163,16 +196,15 @@ async def scrape_all_sources(timeout=30000):
                     new_used_links.add(url)
                 else:
                     print(f"     [-] Discarded (Too old, short, or inaccessible).")
-                    # Add to used_links so we don't try again next time
                     new_used_links.add(url)
                     
-            sources_data[source_name] = valid_articles
+            results[category].extend(valid_articles)
             print(f"-> Completed {source_name}: {len(valid_articles)}/3 articles collected.")
             
         await browser.close()
         
     save_used_links(new_used_links)
-    return sources_data
+    return results
 
 if __name__ == "__main__":
     data = asyncio.run(scrape_all_sources())
