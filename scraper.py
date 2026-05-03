@@ -94,6 +94,21 @@ INTL_SOURCES = {
         "base_url": "https://www.japantimes.co.jp",
         "sections": ["/news/asia-pacific/", "/news/world/"],
         "link_selector": ".article-title a, p a"
+    },
+    "global_times": {
+        "base_url": "https://www.globaltimes.cn",
+        "sections": ["/world", "/china", "/opinion"],
+        "link_selector": "h4 a, h3 a, .list-title a"
+    },
+    "wion": {
+        "base_url": "https://www.wionews.com",
+        "sections": ["/world", "/south-asia", "/technology"],
+        "link_selector": "h2 a, h3 a, .article-title a"
+    },
+    "premium_times": {
+        "base_url": "https://www.premiumtimesng.com",
+        "sections": ["/news/top-news", "/foreign", "/regional"],
+        "link_selector": "h3 a, h2 a, .a-title a"
     }
 }
 
